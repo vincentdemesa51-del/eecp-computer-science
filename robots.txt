@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://vincentdemesa51-del.github.io/eecp-computer-science/sitemap.xml
