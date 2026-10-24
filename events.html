@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080B35">
+<title>Events | EECP Computer Science Department</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/eecp-theme.css">
+<style>
+:root {
+  --navy: #080B35;
+  --purple: #4B19A8;
+  --gold: #FFBF3C;
+  --light: #F6F2FF;
+  --border: #DDD2FF;
+  --text: #211B3D;
+  --muted: #706785;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--light);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+a { text-decoration: none; }
+button { font: inherit; }
+
+/* NAVIGATION */
+.events-page .navbar {
+  position: relative;
+  z-index: 100;
+  background: var(--navy);
+  border-bottom: 3px solid var(--gold);
+}
+.events-page .nav-container {
+  width: 90%;
+  max-width: 1250px;
+  min-height: 85px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.events-page .brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  color: white;
+}
+.events-page .brand .logo {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+  background: white;
+  border: 2px solid var(--gold);
+  border-radius: 12px;
+}
+.events-page .brand-text strong {
+  display: block;
+  color: white;
+  font-size: 20px;
+}
+.events-page .brand-text span {
+  display: block;
+  color: #E8DEFF;
+  font-size: 10px;
+  line-height: 1.5;
+  letter-spacing: 1px;
+}
+.events-page .nav-links {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+.events-page .nav-links a {
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  transition: color .2s;
+}
+.events-page .nav-links a:hover,
+.events-page .nav-links a.active { color: var(--gold); }
+.events-page .nav-links .admin-link {
+  padding: 10px 14px;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  border-radius: 7px;
+}
+.events-page .menu-toggle {
+  display: none;
+  padding: 10px 14px;
+  color: white;
+  background: var(--purple);
+  border: 1px solid var(--gold);
+  border-radius: 7px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* EVENTS BANNER */
+.site-banner {
+  display: none;
+  width: 100%;
+  background: var(--navy);
+  border-bottom: 4px solid var(--gold);
+}
+.site-banner.is-visible { display: block; }
+.site-banner img {
+  display: block;
+  width: 100%;
+  max-height: 430px;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* SECTIONS */
+.events-page .page-section { padding: 55px 7%; }
+.events-page .content-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+}
+.events-page .light-section { background: #EEE7FF; }
+.events-page .section-heading {
+  margin-bottom: 30px;
+  text-align: center;
+}
+.events-page .section-heading > span {
+  display: inline-block;
+  margin-bottom: 10px;
+  color: var(--purple);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+.events-page .section-heading h1,
+.events-page .section-heading h2 {
+  margin: 12px 0;
+  color: var(--navy);
+  font-size: clamp(28px, 4vw, 40px);
+}
+.events-page .section-heading h1::after,
+.events-page .section-heading h2::after {
+  content: "";
+  display: block;
+  width: 65px;
+  height: 4px;
+  margin: 14px auto;
+  background: var(--gold);
+  border-radius: 10px;
+}
+.events-page .section-heading p {
+  max-width: 700px;
+  margin: auto;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+/* EVENT CARDS */
+.events-page .events-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px;
+  width: 100%;
+}
+.events-page .event-card {
+  display: grid;
+  grid-template-columns: 275px minmax(0, 1fr);
+  align-items: start;
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 16px;
+  background: white;
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--purple);
+  border-radius: 14px;
+  box-shadow: 0 5px 18px rgba(8, 11, 53, .06);
+  transition: box-shadow .2s, border-color .2s;
+}
+.events-page .event-card:hover {
+  border-color: var(--gold);
+  box-shadow: 0 8px 22px rgba(8, 11, 53, .1);
+}
+
+/* ONE COMBINED SWIPEABLE GALLERY */
+.events-page .event-media {
+  width: 100%;
+  min-width: 0;
+}
+.events-page .event-gallery {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+  width: 100%;
+  min-width: 0;
+  height: 145px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background: var(--navy);
+  border-bottom: 4px solid var(--gold);
+  border-radius: 8px;
+  scroll-snap-type: x mandatory;
+  scrollbar-color: var(--gold) var(--navy);
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+.events-page .event-gallery .event-image,
+.events-page .event-gallery video {
+  display: block;
+  flex: 0 0 100%;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  height: 141px;
+  max-height: 141px;
+  margin: 0;
+  border: 0;
+  border-radius: 8px;
+  object-fit: contain;
+  background: var(--navy);
+  scroll-snap-align: start;
+}
+.events-page .event-gallery .event-image {
+  object-fit: cover;
+  object-position: center;
+  cursor: zoom-in;
+}
+.events-page .event-gallery .event-image:hover { transform: none; }
+.events-page .no-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 145px;
+  color: white;
+  background: linear-gradient(135deg, var(--navy), var(--purple));
+  border-bottom: 4px solid var(--gold);
+  border-radius: 8px;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+/* EVENT DETAILS */
+.events-page .event-content-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  min-width: 0;
+}
+.events-page .event-date {
+  flex: 0 0 76px;
+  padding: 13px 8px;
+  text-align: center;
+  border: 2px solid #C9B4F5;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #F4EFFF, #E5D9FF);
+}
+.events-page .event-date strong {
+  display: block;
+  color: var(--navy);
+  font-size: 27px;
+}
+.events-page .event-date span {
+  display: block;
+  margin-top: 5px;
+  color: var(--purple);
+  font-size: 11px;
+  font-weight: 800;
+}
+.events-page .event-details {
+  flex: 1;
+  min-width: 0;
+}
+.events-page .event-category {
+  display: inline-block;
+  margin-bottom: 7px;
+  padding: 5px 10px;
+  color: var(--purple);
+  background: #F1EAFF;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .4px;
+}
+.events-page .event-details h3 {
+  margin: 0 0 8px;
+  color: var(--navy);
+  font-size: 17px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.events-page .event-details > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.events-page .event-description {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+.events-page .event-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #E8E0F6;
+}
+.events-page .event-meta span {
+  color: #5F5676;
+  font-size: 12px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.events-page .event-read-more {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 0;
+  color: var(--purple);
+  background: transparent;
+  border: 0;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.events-page .event-read-more:hover { text-decoration: underline; }
+.events-page .events-status {
+  width: 100%;
+  padding: 25px;
+  color: var(--muted);
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  text-align: center;
+  line-height: 1.8;
+}
+
+/* NOTICE */
+.events-page .large-notice {
+  padding: 25px;
+  background: white;
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--gold);
+  border-radius: 14px;
+  box-shadow: 0 5px 18px rgba(8, 11, 53, .05);
+}
+.events-page .large-notice strong {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--navy);
+  font-size: 20px;
+}
+.events-page .large-notice p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* FOOTER */
+.events-page .footer {
+  padding: 35px 7%;
+  color: #EEE7FF;
+  background: var(--navy);
+  border-top: 4px solid var(--gold);
+  text-align: center;
+}
+.events-page .footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+.events-page .footer-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+.events-page .footer-brand img {
+  width: 55px;
+  height: 55px;
+  object-fit: contain;
+  background: white;
+  border: 2px solid var(--gold);
+  border-radius: 12px;
+}
+.events-page .footer-brand strong {
+  color: white;
+  font-size: 18px;
+}
+.events-page .footer-brand p {
+  margin: 5px 0;
+  color: #D5C9F5;
+  font-size: 13px;
+}
+.events-page .footer-tagline {
+  margin: 0;
+  color: var(--gold);
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.events-page .footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 22px;
+}
+.events-page .footer-links a {
+  color: #EEE7FF;
+  font-size: 13px;
+}
+.events-page .footer-links a:hover { color: var(--gold); }
+.events-page .copyright {
+  width: 100%;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255,255,255,.16);
+  color: #C8BCE8;
+  font-size: 12px;
+}
+
+/* FULL EVENT POPUP */
+.event-article-modal[hidden] { display: none !important; }
+.event-article-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(8, 11, 53, .78);
+  backdrop-filter: blur(4px);
+}
+.event-article-dialog {
+  position: relative;
+  width: min(900px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+  padding: 26px clamp(18px, 4vw, 42px) 38px;
+  background: white;
+  border: 2px solid var(--gold);
+  border-radius: 16px;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, .35);
+}
+.event-article-close {
+  position: sticky;
+  top: 0;
+  float: right;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  margin: -12px -10px 10px 12px;
+  color: white;
+  background: var(--navy);
+  border: 0;
+  border-radius: 50%;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
+.event-article-close:hover {
+  color: var(--navy);
+  background: var(--gold);
+}
+.event-article-category {
+  display: inline-block;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  color: var(--purple);
+  background: #F1EAFF;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+}
+.event-article-dialog h2 {
+  margin: 0 0 10px;
+  color: var(--navy);
+  font-size: clamp(24px, 4vw, 36px);
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.event-article-meta {
+  display: block;
+  margin-bottom: 22px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+.event-article-media {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.event-article-media:empty { display: none; }
+.event-article-media img {
+  display: block;
+  width: 100%;
+  max-height: 360px;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  background: var(--navy);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: zoom-in;
+}
+.event-article-media video {
+  display: block;
+  width: 100%;
+  max-height: 420px;
+  background: var(--navy);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.event-article-body {
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.9;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+body.event-modal-open { overflow: hidden; }
+
+/* IMAGE LIGHTBOX */
+.image-lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px 55px;
+  background: rgba(8, 11, 53, .95);
+  cursor: zoom-out;
+}
+.image-lightbox.is-open { display: flex; }
+.image-lightbox img {
+  display: block;
+  max-width: 95vw;
+  max-height: 80vh;
+  object-fit: contain;
+  border: 2px solid var(--gold);
+  border-radius: 10px;
+  box-shadow: 0 15px 50px rgba(0,0,0,.4);
+  cursor: default;
+}
+.image-lightbox button {
+  position: absolute;
+  top: 16px;
+  right: 22px;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  color: var(--navy);
+  background: var(--gold);
+  border: 0;
+  border-radius: 50%;
+  font-size: 28px;
+  cursor: pointer;
+}
+body.lightbox-open { overflow: hidden; }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .events-page .menu-toggle { display: block; }
+  .events-page .nav-container {
+    flex-wrap: wrap;
+    padding: 14px 0;
+  }
+  .events-page .nav-links {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    padding: 15px 0;
+  }
+  .events-page .nav-links.is-open { display: flex; }
+  .events-page .page-section {
+    padding-right: 5%;
+    padding-left: 5%;
+  }
+  .events-page .event-card {
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 14px;
+    padding: 12px;
+  }
+  .events-page .event-gallery,
+  .events-page .no-image { height: 120px; }
+  .events-page .event-gallery .event-image,
+  .events-page .event-gallery video {
+    height: 116px;
+    max-height: 116px;
+  }
+}
+@media (max-width: 650px) {
+  .events-page .page-section { padding: 40px 5%; }
+  .events-page .event-card {
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 12px;
+    padding: 10px;
+  }
+  .events-page .event-gallery,
+  .events-page .no-image { height: 100px; }
+  .events-page .event-gallery .event-image,
+  .events-page .event-gallery video {
+    height: 96px;
+    max-height: 96px;
+  }
+  .events-page .event-content-row { gap: 10px; }
+  .events-page .event-date {
+    flex-basis: 48px;
+    padding: 9px 4px;
+  }
+  .events-page .event-date strong { font-size: 20px; }
+  .events-page .event-date span { font-size: 9px; }
+  .events-page .event-details h3 { font-size: 14px; }
+  .events-page .event-details > p { font-size: 12px; }
+  .events-page .event-category {
+    margin-bottom: 5px;
+    padding: 3px 7px;
+    font-size: 9px;
+  }
+  .events-page .event-description { -webkit-line-clamp: 2; }
+  .events-page .event-meta span { font-size: 11px; }
+  .events-page .event-read-more { font-size: 12px; }
+  .event-article-modal { padding: 10px; }
+  .event-article-dialog {
+    max-height: 94vh;
+    padding: 20px 16px 28px;
+    border-radius: 12px;
+  }
+  .event-article-media { grid-template-columns: 1fr; }
+  .event-article-media img { max-height: 280px; }
+  .image-lightbox { padding: 55px 12px 40px; }
+  .image-lightbox img {
+    max-width: 96vw;
+    max-height: 75vh;
+  }
+  .events-page .footer { padding: 30px 5%; }
+}
+@media (max-width: 380px) {
+  .events-page .event-card {
+    grid-template-columns: 95px minmax(0, 1fr);
+    gap: 9px;
+    padding: 8px;
+  }
+  .events-page .event-gallery,
+  .events-page .no-image { height: 85px; }
+  .events-page .event-gallery .event-image,
+  .events-page .event-gallery video {
+    height: 81px;
+    max-height: 81px;
+  }
+  .events-page .event-details h3 { font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after { transition-duration: .01ms !important; }
+}
+</style>
+</head>
+<body class="events-page">
+<header class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="brand">
+      <img id="navLogoImage" class="logo" src="images/ccs-logo.jpg" alt="EECP Computer Science logo">
+      <div class="brand-text">
+        <strong>EECP</strong>
+        <span>COMPUTER SCIENCE<br>DEPARTMENT</span>
+      </div>
+    </a>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation" aria-expanded="false">☰</button>
+    <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="programs.html">Programs</a>
+      <a href="faculty.html">Faculty</a>
+      <a href="news.html">News</a>
+      <a href="events.html" class="active">Events</a>
+      <a href="contact.html">Contact</a>
+      <a href="admin-login.html" class="admin-link">Admin Login</a>
+    </nav>
+  </div>
+</header>
+<div id="siteBannerWrap" class="site-banner">
+  <img id="siteBannerImage" alt="Department Events banner">
+</div>
+<main>
+  <section class="page-section">
+    <div class="content-container">
+      <div class="section-heading">
+        <span>CALENDAR</span>
+        <h1>Upcoming Events</h1>
+        <p>Stay informed about department activities and important academic events.</p>
+      </div>
+      <div class="events-grid" id="eventsContainer" aria-live="polite">
+        <p class="events-status">Loading events...</p>
+      </div>
+    </div>
+  </section>
+  <section class="page-section light-section">
+    <div class="content-container">
+      <div class="large-notice">
+        <strong>Event Information and Updates</strong>
+        <p>Published events are loaded automatically from the department database. To show an event here, publish it through the Admin Events page.</p>
+      </div>
+    </div>
+  </section>
+</main>
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <img id="footerLogoImage" src="images/ccs-logo.jpg" alt="EECP Computer Science logo">
+      <div>
+        <strong>EECP</strong>
+        <p>Computer Science Department</p>
+      </div>
+    </div>
+    <p class="footer-tagline">Learn. Build. Innovate.</p>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="programs.html">Programs</a>
+      <a href="faculty.html">Faculty</a>
+      <a href="news.html">News</a>
+      <a href="events.html">Events</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <p class="copyright">© <span id="currentYear"></span> EECP Computer Science Department. All rights reserved.</p>
+  </div>
+</footer>
+<div id="eventArticleModal" class="event-article-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="eventArticleTitle" hidden>
+  <div class="event-article-dialog" role="document">
+    <button type="button" id="eventArticleClose" class="event-article-close" aria-label="Close full event">×</button>
+    <span class="event-article-category">DEPARTMENT EVENT</span>
+    <h2 id="eventArticleTitle"></h2>
+    <small id="eventArticleMeta" class="event-article-meta"></small>
+    <div id="eventArticleMedia" class="event-article-media"></div>
+    <div id="eventArticleBody" class="event-article-body"></div>
+  </div>
+</div>
+<div class="image-lightbox" id="imageLightbox" role="dialog" aria-modal="true" aria-label="Expanded event image" aria-hidden="true">
+  <button type="button" id="lightboxClose" aria-label="Close enlarged image">×</button>
+  <img id="lightboxImage" alt="Expanded event image">
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/main.js"></script>
+<script>
+(() => {
+  "use strict";
+
+  const supabase = window.supabaseClient;
+  const $ = id => document.getElementById(id);
+  const container = $("eventsContainer");
+  const articleModal = $("eventArticleModal");
+
+  $("currentYear").textContent = new Date().getFullYear();
+
+  let lastFocusedElement = null;
+
+  /* SAFE URL */
+  function safeUrl(value) {
+    if (!value || typeof value !== "string") return "";
+    try {
+      const url = new URL(value, window.location.href);
+      return ["http:", "https:"].includes(url.protocol) ? url.href : "";
+    } catch {
+      return "";
+    }
+  }
+
+  /* CREATE TEXT ELEMENT */
+  function makeText(tag, className, text) {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    element.textContent = text || "";
+    return element;
+  }
+
+  function showStatus(message) {
+    container.replaceChildren();
+    const p = document.createElement("p");
+    p.className = "events-status";
+    p.textContent = message;
+    container.appendChild(p);
+  }
+
+  /* MOBILE NAVIGATION */
+  $("menuToggle").addEventListener("click", () => {
+    const nav = $("navLinks");
+    const isOpen = nav.classList.toggle("is-open");
+
+    $("menuToggle").setAttribute("aria-expanded", String(isOpen));
+    $("menuToggle").setAttribute(
+      "aria-label",
+      isOpen ? "Close navigation" : "Open navigation"
+    );
+  });
+
+  /* LOAD LOGO AND EVENTS BANNER */
+  async function loadSiteBranding() {
+    if (!supabase) {
+      console.error("Supabase client missing. Check js/config.js.");
+      return;
+    }
+
+    const bannerWrap = $("siteBannerWrap");
+    const bannerImage = $("siteBannerImage");
+    const defaultLogo = "images/ccs-logo.jpg";
+
+    function applyLogo(value) {
+      const url = safeUrl(value) || defaultLogo;
+
+      [$("navLogoImage"), $("footerLogoImage")].forEach(image => {
+        if (!image) return;
+        image.onerror = () => {
+          image.onerror = null;
+          image.src = defaultLogo;
+        };
+        image.src = url;
+      });
+    }
+
+    applyLogo(defaultLogo);
+
+    try {
+      const { data, error } = await supabase
+        .from("site_branding")
+        .select("logo_url,events_banner_url")
+        .eq("id", 1)
+        .maybeSingle();
+
+      if (error) throw error;
+      if (!data) return;
+
+      applyLogo(data.logo_url);
+
+      const bannerUrl = safeUrl(data.events_banner_url);
+
+      if (!bannerUrl) {
+        bannerWrap.classList.remove("is-visible");
+        bannerImage.removeAttribute("src");
+        return;
+      }
+
+      bannerImage.onload = () => {
+        bannerWrap.classList.add("is-visible");
+      };
+
+      bannerImage.onerror = () => {
+        bannerWrap.classList.remove("is-visible");
+        bannerImage.removeAttribute("src");
+        console.error("Could not load Events banner image.");
+      };
+
+      bannerImage.src = bannerUrl;
+    } catch (error) {
+      console.error("Could not load Events branding:", error);
+      applyLogo(defaultLogo);
+    }
+  }
+
+  /* DATE FORMAT */
+  function formatDate(value) {
+    if (!value) {
+      return {
+        day: "--",
+        month: "DATE",
+        full: "Date to be announced"
+      };
+    }
+
+    const parts = String(value).slice(0, 10).split("-");
+    const date = parts.length === 3
+      ? new Date(
+          Number(parts[0]),
+          Number(parts[1]) - 1,
+          Number(parts[2])
+        )
+      : new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+      return {
+        day: "--",
+        month: "DATE",
+        full: String(value)
+      };
+    }
+
+    return {
+      day: String(date.getDate()).padStart(2, "0"),
+      month: date.toLocaleDateString("en-US", {
+        month: "short"
+      }).toUpperCase(),
+      full: date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      })
+    };
+  }
+
+  /* PARSE IMAGE OR VIDEO URL LIST */
+  function parseUrlList(value) {
+    if (Array.isArray(value)) {
+      return value
+        .filter(url => typeof url === "string")
+        .map(url => safeUrl(url))
+        .filter(Boolean);
+    }
+
+    if (typeof value !== "string" || !value.trim()) return [];
+
+    try {
+      const parsed = JSON.parse(value);
+
+      if (Array.isArray(parsed)) {
+        return parsed
+          .filter(url => typeof url === "string")
+          .map(url => safeUrl(url))
+          .filter(Boolean);
+      }
+
+      if (typeof parsed === "string") {
+        const url = safeUrl(parsed);
+        return url ? [url] : [];
+      }
+    } catch {
+      const url = safeUrl(value.trim());
+      return url ? [url] : [];
+    }
+
+    return [];
+  }
+
+  /* SUPPORT MULTIPLE EVENT PHOTOS AND LEGACY image_url */
+  function getEventImages(event) {
+    let urls = parseUrlList(event.image_urls);
+
+    if (!urls.length && event.image_url) {
+      const url = safeUrl(event.image_url);
+      if (url) urls = [url];
+    }
+
+    return [...new Set(urls)];
+  }
+
+  /* SUPPORT MULTIPLE EVENT VIDEOS AND LEGACY video_url */
+  function getEventVideos(event) {
+    let urls = parseUrlList(event.video_urls);
+
+    if (!urls.length && event.video_url) {
+      const url = safeUrl(event.video_url);
+      if (url) urls = [url];
+    }
+
+    return [...new Set(urls)];
+  }
+
+  /* IMAGE LIGHTBOX */
+  function openLightbox(src, alt) {
+    const imageUrl = safeUrl(src);
+    if (!imageUrl) return;
+
+    lastFocusedElement = document.activeElement;
+
+    $("lightboxImage").src = imageUrl;
+    $("lightboxImage").alt = alt || "Expanded event image";
+    $("imageLightbox").classList.add("is-open");
+    $("imageLightbox").setAttribute("aria-hidden", "false");
+    document.body.classList.add("lightbox-open");
+    $("lightboxClose").focus();
+  }
+
+  function closeLightbox() {
+    $("imageLightbox").classList.remove("is-open");
+    $("imageLightbox").setAttribute("aria-hidden", "true");
+    $("lightboxImage").removeAttribute("src");
+    document.body.classList.remove("lightbox-open");
+
+    if (lastFocusedElement) lastFocusedElement.focus();
+  }
+
+  $("lightboxClose").addEventListener("click", closeLightbox);
+
+  $("imageLightbox").addEventListener("click", event => {
+    if (event.target === $("imageLightbox")) closeLightbox();
+  });
+
+  $("lightboxImage").addEventListener("click", event => {
+    event.stopPropagation();
+  });
+
+  /* FULL EVENT POPUP */
+  function openEventArticle(event, dateInfo) {
+    lastFocusedElement = document.activeElement;
+
+    $("eventArticleTitle").textContent =
+      event.title || "Untitled event";
+
+    $("eventArticleMeta").textContent =
+      "Date: " + dateInfo.full +
+      (event.location ? "  •  Location: " + event.location : "");
+
+    $("eventArticleBody").textContent =
+      event.description || "No additional event details are available.";
+
+    const media = $("eventArticleMedia");
+    media.replaceChildren();
+
+    /* POPUP PHOTOS */
+    getEventImages(event).forEach((url, index) => {
+      const image = document.createElement("img");
+      image.src = url;
+      image.alt =
+        (event.title || "Event") + " image " + (index + 1);
+      image.loading = "lazy";
+      image.tabIndex = 0;
+      image.setAttribute("role", "button");
+
+      image.addEventListener("click", () => {
+        openLightbox(image.src, image.alt);
+      });
+
+      image.addEventListener("keydown", keyEvent => {
+        if (keyEvent.key === "Enter" || keyEvent.key === " ") {
+          keyEvent.preventDefault();
+          openLightbox(image.src, image.alt);
+        }
+      });
+
+      media.appendChild(image);
+    });
+
+    /* POPUP VIDEOS */
+    getEventVideos(event).forEach((url, index) => {
+      const video = document.createElement("video");
+      video.src = url;
+      video.controls = true;
+      video.preload = "metadata";
+      video.playsInline = true;
+      video.setAttribute(
+        "aria-label",
+        (event.title || "Event") + " video " + (index + 1)
+      );
+      media.appendChild(video);
+    });
+
+    articleModal.hidden = false;
+    articleModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("event-modal-open");
+    $("eventArticleClose").focus();
+  }
+
+  function closeEventArticle() {
+    articleModal.hidden = true;
+    articleModal.setAttribute("aria-hidden", "true");
+    $("eventArticleTitle").textContent = "";
+    $("eventArticleMeta").textContent = "";
+    $("eventArticleBody").textContent = "";
+
+    $("eventArticleMedia").querySelectorAll("video").forEach(video => {
+      video.pause();
+      video.removeAttribute("src");
+      video.load();
+    });
+
+    $("eventArticleMedia").replaceChildren();
+    document.body.classList.remove("event-modal-open");
+
+    if (lastFocusedElement) lastFocusedElement.focus();
+  }
+
+  $("eventArticleClose").addEventListener("click", closeEventArticle);
+
+  articleModal.addEventListener("click", event => {
+    if (event.target === articleModal) closeEventArticle();
+  });
+
+  /* RENDER EVENT CARD */
+  function renderEvent(event) {
+    const card = document.createElement("article");
+    card.className = "event-card";
+
+    const images = getEventImages(event);
+    const videos = getEventVideos(event);
+
+    /*
+      IMPORTANT:
+      Images and videos are appended to ONE event-gallery.
+      Horizontal swipe shows the next photo or video.
+    */
+    if (images.length || videos.length) {
+      const gallery = document.createElement("div");
+      gallery.className = "event-gallery";
+
+      /* Add photos first */
+      images.forEach((url, index) => {
+        const image = document.createElement("img");
+        image.className = "event-image";
+        image.src = url;
+        image.alt =
+          (event.title || "Event") + " image " + (index + 1);
+        image.loading = "lazy";
+        image.tabIndex = 0;
+        image.setAttribute("role", "button");
+        image.setAttribute("aria-label", "Enlarge " + image.alt);
+
+        image.addEventListener("error", () => image.remove());
+
+        image.addEventListener("click", () => {
+          openLightbox(image.src, image.alt);
+        });
+
+        image.addEventListener("keydown", keyEvent => {
+          if (keyEvent.key === "Enter" || keyEvent.key === " ") {
+            keyEvent.preventDefault();
+            openLightbox(image.src, image.alt);
+          }
+        });
+
+        gallery.appendChild(image);
+      });
+
+      /* Add videos to that SAME gallery */
+      videos.forEach((url, index) => {
+        const video = document.createElement("video");
+        video.src = url;
+        video.controls = true;
+        video.preload = "metadata";
+        video.playsInline = true;
+        video.setAttribute(
+          "aria-label",
+          (event.title || "Event") + " video " + (index + 1)
+        );
+        video.addEventListener("error", () => video.remove());
+        gallery.appendChild(video);
+      });
+
+      card.appendChild(gallery);
+    } else {
+      const placeholder = document.createElement("div");
+      placeholder.className = "no-image";
+      placeholder.textContent = "EECP EVENTS";
+      card.appendChild(placeholder);
+    }
+
+    /* EVENT DATE */
+    const row = document.createElement("div");
+    row.className = "event-content-row";
+
+    const dateInfo = formatDate(event.event_date);
+    const dateBox = document.createElement("div");
+    dateBox.className = "event-date";
+    dateBox.appendChild(makeText("strong", "", dateInfo.day));
+    dateBox.appendChild(makeText("span", "", dateInfo.month));
+    row.appendChild(dateBox);
+
+    /* EVENT INFORMATION */
+    const details = document.createElement("div");
+    details.className = "event-details";
+    details.appendChild(
+      makeText("span", "event-category", "DEPARTMENT EVENT")
+    );
+    details.appendChild(
+      makeText("h3", "", event.title || "Untitled event")
+    );
+
+    if (event.description) {
+      details.appendChild(
+        makeText("p", "event-description", event.description)
+      );
+    }
+
+    const meta = document.createElement("div");
+    meta.className = "event-meta";
+    meta.appendChild(
+      makeText("span", "", "◷ Date: " + dateInfo.full)
+    );
+
+    if (event.location) {
+      meta.appendChild(
+        makeText("span", "", "◉ Location: " + event.location)
+      );
+    }
+
+    details.appendChild(meta);
+
+    const readMore = document.createElement("button");
+    readMore.type = "button";
+    readMore.className = "event-read-more";
+    readMore.textContent = "Read More";
+    readMore.addEventListener("click", () => {
+      openEventArticle(event, dateInfo);
+    });
+
+    details.appendChild(readMore);
+    row.appendChild(details);
+    card.appendChild(row);
+
+    return card;
+  }
+    /* LOAD PUBLISHED EVENTS FROM SUPABASE */
+  async function loadEvents() {
+    if (!supabase || typeof supabase.from !== "function") {
+      showStatus(
+        "Events could not load. Check js/config.js and Supabase."
+      );
+      return;
+    }
+
+    showStatus("Loading events...");
+
+    try {
+      const { data, error } = await supabase
+        .from("events")
+        .select(
+          "id,title,description,event_date,location,image_url,image_urls,video_url,video_urls,published"
+        )
+        .eq("published", true)
+        .order("event_date", {
+          ascending: true,
+          nullsFirst: false
+        });
+
+      if (error) throw error;
+
+      container.replaceChildren();
+
+      if (!data || data.length === 0) {
+        showStatus(
+          "There are no published events at the moment. Please check back soon."
+        );
+        return;
+      }
+
+      data.forEach(event => {
+        container.appendChild(renderEvent(event));
+      });
+    } catch (error) {
+      console.error("Could not load published events:", error);
+
+      showStatus(
+        "We couldn't load events. Check your Supabase events table, image/video columns, and SELECT access policies."
+      );
+    }
+  }
+
+  /* KEYBOARD SUPPORT */
+  document.addEventListener("keydown", event => {
+    if (event.key !== "Escape") return;
+
+    if ($("imageLightbox").classList.contains("is-open")) {
+      closeLightbox();
+      return;
+    }
+
+    if (!articleModal.hidden) {
+      closeEventArticle();
+    }
+  });
+
+  /* INITIALIZE PAGE */
+  loadSiteBranding();
+  loadEvents();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,622 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Branding Manager | EECP Computer Science</title>
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    :root {
+      --navy: #080B35;
+      --purple: #4B19A8;
+      --gold: #FFBF3C;
+      --bg: #f7f5ff;
+      --border: #ded4ff;
+      --text: #24213f;
+      --muted: #6b6887;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+    }
+
+    .wrap {
+      width: min(1050px, 94%);
+      margin: 32px auto 60px;
+    }
+
+    .hero {
+      padding: 28px;
+      border-radius: 16px;
+      border-bottom: 5px solid var(--gold);
+      background: linear-gradient(135deg, var(--navy), var(--purple));
+      color: white;
+    }
+
+    .hero h1 { margin: 0 0 8px; }
+    .hero p { margin: 0; color: #eee7ff; line-height: 1.6; }
+
+    .back {
+      display: inline-block;
+      margin: 18px 0 0;
+      padding: 10px 15px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: white;
+      color: var(--purple);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .panel {
+      margin-top: 22px;
+      padding: 24px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(8, 11, 53, .06);
+    }
+
+    h2 { color: var(--navy); }
+
+    label {
+      display: block;
+      margin: 15px 0 7px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    select, input[type="file"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d5ccef;
+      border-radius: 8px;
+      background: #fcfbff;
+      font: inherit;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .field {
+      min-width: 0;
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fdfcff;
+    }
+
+    .field h3 { color: var(--purple); }
+
+    .preview {
+      display: block;
+      width: 100%;
+      max-height: 260px;
+      margin-top: 14px;
+      object-fit: contain;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #f7f5ff;
+    }
+
+    #logoPreview {
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+    }
+
+    [hidden] { display: none !important; }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    button {
+      padding: 11px 15px;
+      border: 0;
+      border-radius: 8px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:disabled { opacity: .55; cursor: not-allowed; }
+
+    .primary { background: var(--purple); color: white; }
+    .primary:hover:not(:disabled) { background: var(--navy); }
+    .secondary { background: #eee8ff; color: var(--purple); }
+    .danger { background: #fff0f0; color: #b42318; }
+
+    .muted { color: var(--muted); font-size: 13px; line-height: 1.6; }
+
+    #message {
+      margin-top: 16px;
+      overflow-wrap: anywhere;
+      line-height: 1.6;
+      font-weight: 700;
+    }
+
+    .note {
+      padding: 13px;
+      margin-top: 18px;
+      border-left: 4px solid var(--gold);
+      border-radius: 7px;
+      background: #f5f0ff;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 650px) {
+      .grid { grid-template-columns: 1fr; }
+      .panel { padding: 18px; }
+      .hero { padding: 22px; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="wrap">
+    <header class="hero">
+      <h1>Page Branding Manager</h1>
+      <p>Manage each page's logo and banner independently.</p>
+    </header>
+
+    <a class="back" href="./admin-dashboard.html">← Back to Dashboard</a>
+
+    <section class="panel">
+      <h2>Select a Page</h2>
+
+      <label for="pageSelect">Website page</label>
+      <select id="pageSelect">
+        <option value="home">Home</option>
+        <option value="about">About</option>
+        <option value="programs">Programs</option>
+        <option value="faculty">Faculty</option>
+        <option value="news">News</option>
+        <option value="events">Events</option>
+        <option value="contact">Contact</option>
+      </select>
+
+      <p class="muted">
+        Choose a page first. Uploading or removing a logo or banner
+        only changes the selected page.
+      </p>
+
+      <div id="message" role="status" aria-live="polite"></div>
+
+      <div class="grid">
+        <div class="field">
+          <h3>Page Logo</h3>
+          <label for="logoFile">Choose logo image</label>
+          <input id="logoFile" type="file"
+                 accept="image/jpeg,image/png,image/webp">
+
+          <p class="muted">JPG, PNG, or WebP. Maximum 5 MB.</p>
+
+          <img id="logoPreview" class="preview"
+               alt="Selected page logo preview" hidden>
+
+          <div class="actions">
+            <button id="saveLogo" class="primary" type="button">
+              Save Logo
+            </button>
+            <button id="removeLogo" class="danger" type="button">
+              Remove Logo
+            </button>
+          </div>
+        </div>
+
+        <div class="field">
+          <h3>Page Banner</h3>
+          <label for="bannerFile">Choose banner image</label>
+          <input id="bannerFile" type="file"
+                 accept="image/jpeg,image/png,image/webp">
+
+          <p class="muted">JPG, PNG, or WebP. Maximum 5 MB.</p>
+
+          <img id="bannerPreview" class="preview"
+               alt="Selected page banner preview" hidden>
+
+          <div class="actions">
+            <button id="saveBanner" class="primary" type="button">
+              Save Banner
+            </button>
+            <button id="removeBanner" class="danger" type="button">
+              Remove Banner
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="reload" class="secondary" type="button">
+          Reload Saved Branding
+        </button>
+      </div>
+
+      <div class="note">
+        <strong>Independent storage:</strong> every page has its own
+        database record and unique image paths. The logo and banner
+        fields are updated separately.
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const client = window.supabaseClient;
+      const $ = id => document.getElementById(id);
+
+      const pageSelect = $("pageSelect");
+      const logoInput = $("logoFile");
+      const bannerInput = $("bannerFile");
+      const logoPreview = $("logoPreview");
+      const bannerPreview = $("bannerPreview");
+      const message = $("message");
+
+      const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+      ];
+
+      let currentUser = null;
+      let saved = { logo_url: null, logo_path: null,
+                    banner_url: null, banner_path: null };
+      let logoObjectUrl = null;
+      let bannerObjectUrl = null;
+
+      function tell(text, error = false) {
+        message.textContent = text;
+        message.style.color = error ? "#b42318" : "#16703c";
+      }
+
+      function validate(file) {
+        if (!file) throw new Error("Choose an image first.");
+        if (!allowedTypes.includes(file.type)) {
+          throw new Error("Use a JPG, PNG, or WebP image.");
+        }
+        if (file.size > 5 * 1024 * 1024) {
+          throw new Error("Image must be 5 MB or smaller.");
+        }
+      }
+
+      function extensionFor(file) {
+        return {
+          "image/jpeg": "jpg",
+          "image/png": "png",
+          "image/webp": "webp"
+        }[file.type];
+      }
+
+      function showPreview(img, url) {
+        if (!url) {
+          img.removeAttribute("src");
+          img.hidden = true;
+          return;
+        }
+        img.src = url;
+        img.hidden = false;
+      }
+
+      async function checkAdmin() {
+        if (!client) {
+          throw new Error("Supabase is not initialized. Check js/config.js.");
+        }
+
+        const { data, error } = await client.auth.getUser();
+
+        if (error || !data.user) {
+          location.replace("./admin-login.html");
+          return false;
+        }
+
+        currentUser = data.user;
+
+        const { data: admin, error: adminError } = await client
+          .from("admins")
+          .select("user_id")
+          .eq("user_id", currentUser.id)
+          .maybeSingle();
+
+        if (adminError || !admin) {
+          await client.auth.signOut();
+          location.replace("./admin-login.html");
+          return false;
+        }
+
+        return true;
+      }
+
+      async function ensurePageRecord(pageKey) {
+        const { data: existing, error: readError } = await client
+          .from("site_branding")
+          .select("id,page_key,logo_url,logo_path,banner_url,banner_path")
+          .eq("page_key", pageKey)
+          .maybeSingle();
+
+        if (readError) throw readError;
+        if (existing) return existing;
+
+        const { data, error } = await client
+          .from("site_branding")
+          .insert({ page_key: pageKey })
+          .select("id,page_key,logo_url,logo_path,banner_url,banner_path")
+          .single();
+
+        if (error) throw error;
+        return data;
+      }
+
+      async function loadBranding() {
+        try {
+          tell("Loading branding for " + pageSelect.value + "...");
+
+          const record = await ensurePageRecord(pageSelect.value);
+          saved = record;
+
+          showPreview(logoPreview, saved.logo_url);
+          showPreview(bannerPreview, saved.banner_url);
+
+          logoInput.value = "";
+          bannerInput.value = "";
+
+          tell("Loaded branding for " + pageSelect.value + ".");
+        } catch (error) {
+          console.error(error);
+          tell("Could not load branding: " + error.message, true);
+        }
+      }
+
+      async function uploadImage(kind) {
+        const isLogo = kind === "logo";
+        const file = isLogo ? logoInput.files[0] : bannerInput.files[0];
+        const fieldUrl = isLogo ? "logo_url" : "banner_url";
+        const fieldPath = isLogo ? "logo_path" : "banner_path";
+        const button = isLogo ? $("saveLogo") : $("saveBanner");
+
+        if (!file) {
+          tell("Choose a " + kind + " image first.", true);
+          return;
+        }
+
+        const oldButtonText = button.textContent;
+        button.disabled = true;
+        button.textContent = "Uploading...";
+
+        let uploadedPath = null;
+
+        try {
+          validate(file);
+
+          const pageKey = pageSelect.value;
+          const path = pageKey + "/" + kind + "-" +
+            crypto.randomUUID() + "." + extensionFor(file);
+
+          const { data: uploadData, error: uploadError } = await client
+            .storage
+            .from("page-branding")
+            .upload(path, file, {
+              contentType: file.type,
+              upsert: false
+            });
+
+          if (uploadError) throw uploadError;
+          uploadedPath = uploadData.path;
+
+          const { data: publicData } = client.storage
+            .from("page-branding")
+            .getPublicUrl(uploadData.path);
+
+          if (!publicData?.publicUrl) {
+            throw new Error("Could not create a public image URL.");
+          }
+
+          const record = await ensurePageRecord(pageKey);
+
+          const payload = {
+            [fieldUrl]: publicData.publicUrl,
+            [fieldPath]: uploadedPath,
+            updated_at: new Date().toISOString()
+          };
+
+          const { error: updateError } = await client
+            .from("site_branding")
+            .update(payload)
+            .eq("id", record.id);
+
+          if (updateError) throw updateError;
+
+          const oldPath = saved[fieldPath];
+
+          saved[fieldUrl] = publicData.publicUrl;
+          saved[fieldPath] = uploadedPath;
+          uploadedPath = null;
+
+          showPreview(
+            isLogo ? logoPreview : bannerPreview,
+            publicData.publicUrl
+          );
+
+          if (isLogo) logoInput.value = "";
+          else bannerInput.value = "";
+
+          tell(kind.charAt(0).toUpperCase() + kind.slice(1) +
+            " saved for " + pageKey + ".");
+
+          // Remove only this page's previous file for this field.
+          if (oldPath && oldPath !== saved[fieldPath]) {
+            const { error: deleteError } = await client.storage
+              .from("page-branding")
+              .remove([oldPath]);
+
+            if (deleteError) {
+              console.warn("Old file cleanup failed:", deleteError);
+              tell(kind + " saved, but the old image file could not be deleted.", true);
+            }
+          }
+        } catch (error) {
+          console.error(error);
+
+          if (uploadedPath) {
+            await client.storage
+              .from("page-branding")
+              .remove([uploadedPath]);
+          }
+
+          tell("Could not save " + kind + ": " + error.message, true);
+        } finally {
+          button.disabled = false;
+          button.textContent = oldButtonText;
+        }
+      }
+
+      async function removeImage(kind) {
+        const isLogo = kind === "logo";
+        const fieldUrl = isLogo ? "logo_url" : "banner_url";
+        const fieldPath = isLogo ? "logo_path" : "banner_path";
+        const button = isLogo ? $("removeLogo") : $("removeBanner");
+
+        if (!saved[fieldUrl] && !saved[fieldPath]) {
+          tell("There is no saved " + kind + " for this page.", true);
+          return;
+        }
+
+        if (!confirm(
+          "Remove only the " + kind + " for " + pageSelect.value + "?"
+        )) return;
+
+        button.disabled = true;
+
+        try {
+          const record = await ensurePageRecord(pageSelect.value);
+          const oldPath = saved[fieldPath];
+
+          const { error } = await client
+            .from("site_branding")
+            .update({
+              [fieldUrl]: null,
+              [fieldPath]: null,
+              updated_at: new Date().toISOString()
+            })
+            .eq("id", record.id);
+
+          if (error) throw error;
+
+          saved[fieldUrl] = null;
+          saved[fieldPath] = null;
+
+          showPreview(isLogo ? logoPreview : bannerPreview, null);
+
+          if (isLogo) logoInput.value = "";
+          else bannerInput.value = "";
+
+          tell("Removed " + kind + " from " + pageSelect.value + ".");
+
+          if (oldPath) {
+            const { error: storageError } = await client.storage
+              .from("page-branding")
+              .remove([oldPath]);
+
+            if (storageError) {
+              console.warn(storageError);
+              tell(kind + " removed from the page, but its storage file could not be deleted.", true);
+            }
+          }
+        } catch (error) {
+          console.error(error);
+          tell("Could not remove " + kind + ": " + error.message, true);
+        } finally {
+          button.disabled = false;
+        }
+      }
+
+      logoInput.addEventListener("change", () => {
+        if (logoObjectUrl) URL.revokeObjectURL(logoObjectUrl);
+        logoObjectUrl = null;
+
+        const file = logoInput.files[0];
+        if (!file) {
+          showPreview(logoPreview, saved.logo_url);
+          return;
+        }
+
+        try {
+          validate(file);
+          logoObjectUrl = URL.createObjectURL(file);
+          showPreview(logoPreview, logoObjectUrl);
+        } catch (error) {
+          logoInput.value = "";
+          showPreview(logoPreview, saved.logo_url);
+          tell(error.message, true);
+        }
+      });
+
+      bannerInput.addEventListener("change", () => {
+        if (bannerObjectUrl) URL.revokeObjectURL(bannerObjectUrl);
+        bannerObjectUrl = null;
+
+        const file = bannerInput.files[0];
+        if (!file) {
+          showPreview(bannerPreview, saved.banner_url);
+          return;
+        }
+
+        try {
+          validate(file);
+          bannerObjectUrl = URL.createObjectURL(file);
+          showPreview(bannerPreview, bannerObjectUrl);
+        } catch (error) {
+          bannerInput.value = "";
+          showPreview(bannerPreview, saved.banner_url);
+          tell(error.message, true);
+        }
+      });
+
+      $("saveLogo").addEventListener("click", () => uploadImage("logo"));
+      $("saveBanner").addEventListener("click", () => uploadImage("banner"));
+      $("removeLogo").addEventListener("click", () => removeImage("logo"));
+      $("removeBanner").addEventListener("click", () => removeImage("banner"));
+      $("reload").addEventListener("click", loadBranding);
+
+      pageSelect.addEventListener("change", async () => {
+        if (logoObjectUrl) URL.revokeObjectURL(logoObjectUrl);
+        if (bannerObjectUrl) URL.revokeObjectURL(bannerObjectUrl);
+        logoObjectUrl = null;
+        bannerObjectUrl = null;
+        await loadBranding();
+      });
+
+      async function init() {
+        try {
+          if (!await checkAdmin()) return;
+          await loadBranding();
+        } catch (error) {
+          console.error(error);
+          tell(error.message || "Could not initialize branding manager.", true);
+        }
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>

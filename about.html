@@ -1,0 +1,924 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Learn about the EECP Computer Science Department.">
+  <title>About | EECP Computer Science Department</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/eecp-theme.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --navy: #080B35;
+      --purple: #4B19A8;
+      --gold: #FFBF3C;
+      --light: #f5f3fc;
+      --text: #30334d;
+      --muted: #6e7088;
+      --border: #e4def4;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: #fff;
+      line-height: 1.7;
+    }
+
+    img { max-width: 100%; }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--navy);
+      border-bottom: 3px solid var(--gold);
+      box-shadow: 0 5px 20px rgba(8,11,53,.18);
+    }
+
+    .nav-container {
+      width: min(1200px, 92%);
+      min-height: 85px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .nav-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .logo-img {
+      width: 55px;
+      height: 55px;
+      object-fit: contain;
+      background: #fff;
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.35;
+    }
+
+    .brand-text strong {
+      color: var(--gold);
+      font-size: 19px;
+      letter-spacing: 1px;
+    }
+
+    .brand-text span {
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      padding: 9px 11px;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 7px;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--navy);
+      background: var(--gold);
+    }
+
+    .menu-toggle {
+      display: none;
+      padding: 8px 12px;
+      color: var(--navy);
+      background: var(--gold);
+      border: 0;
+      border-radius: 7px;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .about-hero {
+      width: 100%;
+      min-height: 260px;
+      aspect-ratio: 1990 / 700;
+      background-color: var(--purple);
+      background-image:
+        linear-gradient(90deg, rgba(8,11,53,.2), rgba(75,25,168,.05)),
+        url("images/ccs-banner.jpg");
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      border-bottom: 5px solid var(--gold);
+    }
+
+    .page-section { padding: 65px 5%; }
+
+    .content-container {
+      width: 100%;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .light-section { background: var(--light); }
+
+    .section-heading {
+      max-width: 760px;
+      margin: 0 auto 35px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      color: var(--purple);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .section-heading h2 {
+      margin: 8px 0 12px;
+      color: var(--navy);
+      font-size: clamp(27px, 4vw, 38px);
+      line-height: 1.25;
+    }
+
+    .section-heading p { color: var(--muted); margin: 0; }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .intro-card {
+      padding: 30px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-left: 5px solid var(--purple);
+      border-radius: 14px;
+      box-shadow: 0 8px 25px rgba(8,11,53,.06);
+    }
+
+    .intro-card h2 {
+      margin: 8px 0 15px;
+      color: var(--navy);
+      font-size: 30px;
+      line-height: 1.3;
+    }
+
+    .intro-card p { color: var(--muted); }
+
+    .notice-box {
+      margin-top: 22px;
+      padding: 16px;
+      background: #f6f1ff;
+      border: 1px solid #d9c9fa;
+      border-left: 4px solid var(--purple);
+      border-radius: 0 10px 10px 0;
+    }
+
+    .notice-box strong { color: var(--navy); }
+    .notice-box p { margin-bottom: 0; }
+
+    .department-visual {
+      min-height: 300px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #fff;
+      background: linear-gradient(140deg, var(--navy), var(--purple));
+      border: 2px solid var(--gold);
+      border-radius: 17px;
+    }
+
+    .visual-symbol {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 18px;
+      display: grid;
+      place-items: center;
+      color: var(--navy);
+      background: var(--gold);
+      border-radius: 18px;
+      font-size: 34px;
+      font-weight: 900;
+    }
+
+    .department-visual h3 {
+      margin: 0 0 10px;
+      color: var(--gold);
+      font-size: 25px;
+    }
+
+    .department-visual p {
+      max-width: 340px;
+      margin: 0;
+      color: #f0eaff;
+    }
+
+    /* MISSION, VISION, OBJECTIVES: IMAGE ONLY */
+
+    .image-only-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0;
+      overflow: hidden;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .image-only-card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      min-height: 100px;
+      padding: 18px;
+      border: 0;
+      border-right: 1px solid var(--border);
+      background: #fff;
+      cursor: zoom-in;
+    }
+
+    .image-only-card:last-child { border-right: 0; }
+
+    .image-only-card:hover {
+      background: #faf8ff;
+    }
+
+    .image-only-card .mvo-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 600px;
+      object-fit: contain;
+      border-radius: 10px;
+      transition: transform .2s ease;
+    }
+
+    .image-only-card:hover .mvo-image {
+      transform: scale(1.015);
+    }
+
+    .image-only-card .mvo-image[hidden] {
+      display: none;
+    }
+
+    .image-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      align-items: center;
+      justify-content: center;
+      padding: 55px 20px 20px;
+      background: rgba(0,0,0,.93);
+      cursor: zoom-out;
+    }
+
+    .image-modal.show { display: flex; }
+
+    .image-modal img {
+      display: block;
+      max-width: 96vw;
+      max-height: 92vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      cursor: default;
+    }
+
+    .image-modal-close {
+      position: absolute;
+      top: 10px;
+      right: 22px;
+      color: white;
+      background: transparent;
+      border: 0;
+      font-size: 44px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .value-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .value-card {
+      padding: 22px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-bottom: 4px solid var(--gold);
+      border-radius: 13px;
+    }
+
+    .value-number {
+      display: inline-block;
+      padding: 4px 10px;
+      margin-bottom: 10px;
+      color: var(--navy);
+      background: #fff0c8;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .value-card h3 {
+      margin: 0 0 8px;
+      color: var(--purple);
+      font-size: 19px;
+    }
+
+    .value-card p { margin: 0; color: var(--muted); }
+
+    .commitment-box {
+      max-width: 950px;
+      margin: auto;
+      padding: 38px;
+      text-align: center;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-top: 5px solid var(--gold);
+      border-radius: 17px;
+      box-shadow: 0 8px 25px rgba(8,11,53,.06);
+    }
+
+    .commitment-box h2 {
+      margin: 0 0 12px;
+      color: var(--navy);
+      font-size: clamp(25px, 3vw, 34px);
+    }
+
+    .commitment-box p {
+      max-width: 720px;
+      margin: auto;
+      color: var(--muted);
+    }
+
+    .commitment-tagline {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 9px 16px;
+      color: var(--navy);
+      background: var(--gold);
+      border-radius: 7px;
+      font-weight: 900;
+    }
+
+    .footer {
+      color: #fff;
+      background: var(--navy);
+      border-top: 5px solid var(--gold);
+    }
+
+    .footer-content {
+      width: min(1200px, 90%);
+      margin: auto;
+      padding: 38px 0 20px;
+    }
+
+    .footer-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .footer-brand .logo-img {
+      width: 52px;
+      height: 52px;
+    }
+
+    .footer-brand strong {
+      display: block;
+      color: var(--gold);
+      font-size: 17px;
+    }
+
+    .footer-brand p {
+      margin: 3px 0 0;
+      color: #d8d6f0;
+      font-size: 12px;
+    }
+
+    .footer-bottom {
+      margin-top: 25px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(255,255,255,.15);
+      color: #d8d6f0;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .nav-container { flex-wrap: wrap; padding: 12px 0; }
+      .nav-top { width: 100%; }
+      .menu-toggle { display: block; }
+
+      .nav-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .nav-links.open { display: flex; }
+      .nav-links a { display: block; }
+      .two-column { grid-template-columns: 1fr; }
+      .value-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 680px) {
+      .page-section { padding: 45px 5%; }
+
+      .image-only-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .image-only-card {
+        padding: 14px;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .image-only-card:last-child { border-bottom: 0; }
+      .value-grid { grid-template-columns: 1fr; }
+      .intro-card { padding: 22px; }
+      .commitment-box { padding: 26px 20px; }
+      .about-hero { min-height: 180px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="nav-top">
+        <a class="brand" href="index.html">
+          <img id="siteLogo" class="logo-img"
+               src="images/ccs-logo.jpg"
+               alt="EECP Computer Science logo">
+          <span class="brand-text">
+            <strong>EECP</strong>
+            <span>COMPUTER SCIENCE DEPARTMENT</span>
+          </span>
+        </a>
+
+        <button class="menu-toggle" id="menuToggle"
+                type="button" aria-label="Toggle navigation"
+                aria-expanded="false">☰</button>
+      </div>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="index.html">Home</a>
+        <a href="about.html" class="active">About</a>
+        <a href="programs.html">Programs</a>
+        <a href="faculty.html">Faculty</a>
+        <a href="news.html">News</a>
+        <a href="events.html">Events</a>
+        <a href="contact.html">Contact</a>
+        <a href="admin-login.html">Admin Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="about-hero" id="aboutHero"
+             role="img" aria-label="EECP Computer Science Department banner"></section>
+
+    <section class="page-section" id="department">
+      <div class="content-container">
+        <div class="two-column">
+          <article class="intro-card">
+            <span class="eyebrow">Our Department</span>
+            <h2>About EECP Computer Science</h2>
+
+            <p>
+              The EECP Computer Science Department focuses on developing
+              students' knowledge and practical skills in computer science,
+              programming, software development, and information technology.
+            </p>
+
+            <p>
+              Through academic instruction, hands-on activities,
+              collaborative projects, and technology-based learning,
+              students are encouraged to strengthen their logical thinking,
+              creativity, communication, and problem-solving abilities.
+            </p>
+
+            <p>
+              The department promotes responsible technology use, teamwork,
+              continuous learning, and ethical practices in the digital
+              environment.
+            </p>
+
+            <div class="notice-box">
+              <strong>Department Background</strong>
+              <p id="departmentBackground">
+                The department is committed to providing quality education
+                and developing competent, ethical, and innovative computing
+                professionals.
+              </p>
+            </div>
+          </article>
+
+          <aside class="department-visual">
+            <div class="visual-symbol" aria-hidden="true">&lt;/&gt;</div>
+            <h3>Learn • Build • Innovate</h3>
+            <p>
+              Computer Science combines knowledge, creativity, logic,
+              and technology to solve problems and develop useful
+              digital solutions.
+            </p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- IMAGE-ONLY MISSION, VISION, OBJECTIVES -->
+    <section class="page-section light-section" id="mission-vision">
+      <div class="content-container">
+        <div class="section-heading">
+          <span class="eyebrow">Our Foundation</span>
+          <h2>Mission, Vision, and Objectives</h2>
+          <p>Guiding our direction toward academic excellence and a better tomorrow.</p>
+        </div>
+
+        <div class="image-only-grid">
+          <button class="image-only-card" type="button"
+                  aria-label="Enlarge Mission image"
+                  onclick="openMvoImage('missionImage')">
+            <img id="missionImage" class="mvo-image"
+                 alt="Computer Science Mission" hidden>
+          </button>
+
+          <button class="image-only-card" type="button"
+                  aria-label="Enlarge Vision image"
+                  onclick="openMvoImage('visionImage')">
+            <img id="visionImage" class="mvo-image"
+                 alt="Computer Science Vision" hidden>
+          </button>
+
+          <button class="image-only-card" type="button"
+                  aria-label="Enlarge Objectives image"
+                  onclick="openMvoImage('objectivesImage')">
+            <img id="objectivesImage" class="mvo-image"
+                 alt="Computer Science Objectives and Goals" hidden>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="page-section" id="values">
+      <div class="content-container">
+        <div class="section-heading">
+          <span class="eyebrow">What We Believe In</span>
+          <h2>Department Values</h2>
+          <p>The principles that guide our learning, work, and collaboration.</p>
+        </div>
+
+        <div class="value-grid" id="valuesGrid">
+          <article class="value-card">
+            <span class="value-number">01</span>
+            <h3>Learning</h3>
+            <p>Promote continuous learning and the development of knowledge.</p>
+          </article>
+
+          <article class="value-card">
+            <span class="value-number">02</span>
+            <h3>Innovation</h3>
+            <p>Encourage creativity and practical technological solutions.</p>
+          </article>
+
+          <article class="value-card">
+            <span class="value-number">03</span>
+            <h3>Collaboration</h3>
+            <p>Build teamwork, communication, and mutual respect.</p>
+          </article>
+
+          <article class="value-card">
+            <span class="value-number">04</span>
+            <h3>Professionalism</h3>
+            <p>Practice ethical conduct and responsible technology use.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="page-section light-section" id="commitment">
+      <div class="content-container">
+        <div class="commitment-box">
+          <span class="eyebrow">Our Promise</span>
+          <h2 id="commitmentTitle">Our Commitment</h2>
+          <p id="commitmentText">
+            We are committed to nurturing capable, creative, and responsible
+            computing professionals through quality instruction, collaboration,
+            innovation, and service to the community.
+          </p>
+          <span class="commitment-tagline">LEARN • BUILD • INNOVATE</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img id="footerSiteLogo" class="logo-img"
+               src="images/ccs-logo.jpg"
+               alt="EECP Computer Science logo">
+          <div>
+            <strong>EECP Computer Science</strong>
+            <p>College of Computer Studies</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        &copy; <span id="currentYear"></span>
+        EECP Computer Science Department. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Enlarged image popup -->
+  <div id="mvoImageModal" class="image-modal"
+       onclick="closeMvoImage()" aria-hidden="true">
+    <button class="image-modal-close" type="button"
+            aria-label="Close image"
+            onclick="closeMvoImage()">&times;</button>
+    <img id="mvoExpandedImage"
+         alt="Expanded department image"
+         onclick="event.stopPropagation()">
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const $ = id => document.getElementById(id);
+      const PAGE_KEY = "about";
+      const BUCKET = "site-branding";
+      const client = window.supabaseClient;
+
+      const menuToggle = $("menuToggle");
+      const navLinks = $("navLinks");
+
+      menuToggle.addEventListener("click", () => {
+        const open = navLinks.classList.toggle("open");
+        menuToggle.setAttribute("aria-expanded", String(open));
+      });
+
+      $("currentYear").textContent = new Date().getFullYear();
+
+      function setText(id, value) {
+        const element = $(id);
+        if (element && value !== null && value !== undefined && value !== "") {
+          element.textContent = value;
+        }
+      }
+
+      function renderList(id, values) {
+        const list = $(id);
+        if (!list || !Array.isArray(values) || values.length === 0) return;
+
+        list.replaceChildren();
+
+        values.forEach(item => {
+          const li = document.createElement("li");
+
+          if (typeof item === "string") {
+            li.textContent = item;
+          } else if (item && typeof item === "object") {
+            const title = item.title || item.name || "";
+            const description = item.description || "";
+            li.textContent = [title, description].filter(Boolean).join(" — ");
+          }
+
+          if (li.textContent.trim()) list.appendChild(li);
+        });
+      }
+
+      function renderValues(values) {
+        const grid = $("valuesGrid");
+        if (!grid || !Array.isArray(values) || values.length === 0) return;
+
+        grid.replaceChildren();
+
+        values.forEach((item, index) => {
+          const title = typeof item === "string"
+            ? item
+            : (item?.title || item?.name || "Department Value");
+
+          const description = typeof item === "string"
+            ? ""
+            : (item?.description || "");
+
+          const card = document.createElement("article");
+          card.className = "value-card";
+
+          const number = document.createElement("span");
+          number.className = "value-number";
+          number.textContent = String(index + 1).padStart(2, "0");
+
+          const heading = document.createElement("h3");
+          heading.textContent = title;
+
+          const paragraph = document.createElement("p");
+          paragraph.textContent = description;
+
+          card.append(number, heading, paragraph);
+          grid.appendChild(card);
+        });
+      }
+
+      async function resolveImageUrl(path) {
+        if (!path) return "";
+        if (/^https?:\/\//i.test(path)) return path;
+        if (!client) return "";
+
+        const { data } = client.storage.from(BUCKET).getPublicUrl(path);
+        return data?.publicUrl || "";
+      }
+
+      async function renderImage(imgId, path) {
+        const img = $(imgId);
+        const url = await resolveImageUrl(path);
+
+        if (url) {
+          img.onerror = () => {
+            img.hidden = true;
+          };
+          img.src = url;
+          img.hidden = false;
+        } else {
+          img.removeAttribute("src");
+          img.hidden = true;
+        }
+      }
+
+      async function loadBranding() {
+        if (!client) return;
+
+        const { data, error } = await client
+          .from("page_branding")
+          .select("logo_path,banner_path,mission_image_path,vision_image_path,objectives_image_path")
+          .eq("page_key", PAGE_KEY)
+          .maybeSingle();
+
+        if (error) {
+          console.warn("Could not load About page branding:", error.message);
+          return;
+        }
+
+        if (!data) return;
+
+        if (data.logo_path) {
+          const logoUrl = await resolveImageUrl(data.logo_path);
+          if (logoUrl) {
+            $("siteLogo").src = logoUrl;
+            $("footerSiteLogo").src = logoUrl;
+          }
+        }
+
+        if (data.banner_path) {
+          const bannerUrl = await resolveImageUrl(data.banner_path);
+          if (bannerUrl) {
+            $("aboutHero").style.backgroundImage =
+              'url("' + bannerUrl.replace(/"/g, "%22") + '")';
+          }
+        }
+
+        await Promise.all([
+          renderImage("missionImage", data.mission_image_path),
+          renderImage("visionImage", data.vision_image_path),
+          renderImage("objectivesImage", data.objectives_image_path)
+        ]);
+      }
+
+      async function loadAboutContent() {
+        if (!client) return;
+
+        const { data, error } = await client
+          .from("about_content")
+          .select("*")
+          .eq("page_key", PAGE_KEY)
+          .maybeSingle();
+
+        if (error) {
+          console.warn("Could not load About page content:", error.message);
+          return;
+        }
+
+        if (!data) return;
+
+        setText("departmentBackground", data.department_background);
+        setText("commitmentTitle", data.commitment_title);
+        setText("commitmentText", data.commitment_text);
+
+        renderValues(data.department_values);
+      }
+
+      async function init() {
+        if (!client) {
+          console.warn(
+            "Supabase client not found. Check js/config.js and window.supabaseClient."
+          );
+          return;
+        }
+
+        await Promise.all([
+          loadBranding(),
+          loadAboutContent()
+        ]);
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+      } else {
+        init();
+      }
+    })();
+
+    function openMvoImage(imageId) {
+      const source = document.getElementById(imageId);
+
+      if (!source || source.hidden || !source.src) return;
+
+      const modal = document.getElementById("mvoImageModal");
+      document.getElementById("mvoExpandedImage").src = source.src;
+
+      modal.classList.add("show");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeMvoImage() {
+      const modal = document.getElementById("mvoImageModal");
+
+      modal.classList.remove("show");
+      modal.setAttribute("aria-hidden", "true");
+      document.getElementById("mvoExpandedImage").removeAttribute("src");
+      document.body.style.overflow = "";
+    }
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeMvoImage();
+    });
+  </script>
+</body>
+</html>

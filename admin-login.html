@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | EECP Computer Science Department</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        :root {
+            --navy: #080B35;
+            --purple: #4B19A8;
+            --gold: #FFBF3C;
+            --lavender: #F6F4FF;
+            --border: #DED8F5;
+            --muted: #68708D;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            font-family: Arial, Helvetica, sans-serif;
+            background:
+                radial-gradient(circle at 15% 15%, #e8ddff 0, transparent 35%),
+                linear-gradient(135deg, var(--lavender), #fff);
+            color: var(--navy);
+        }
+
+        .login-navbar {
+            width: 100%;
+            padding: 16px 5%;
+            background: var(--navy);
+            border-bottom: 5px solid var(--gold);
+            box-shadow: 0 5px 20px rgba(8,11,53,.12);
+        }
+
+        .login-navbar a {
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 13px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .login-logo {
+            width: 52px;
+            height: 52px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+            font-weight: 900;
+            background: var(--gold);
+            color: var(--navy);
+        }
+
+        .login-navbar small {
+            display: block;
+            margin-top: 4px;
+            color: #e1def6;
+            font-weight: normal;
+        }
+
+        .login-page {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 45px 20px;
+        }
+
+        .login-layout {
+            width: 100%;
+            max-width: 1100px;
+            display: grid;
+            grid-template-columns: minmax(0,1fr) 430px;
+            align-items: center;
+            gap: 55px;
+        }
+
+        .login-intro { padding: 25px 0; }
+
+        .login-eyebrow {
+            display: inline-block;
+            padding: 9px 15px;
+            margin-bottom: 20px;
+            color: var(--purple);
+            background: #eee8ff;
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: .5px;
+        }
+
+        .login-intro h2 {
+            margin: 0 0 18px;
+            color: var(--navy);
+            font-size: clamp(30px,4vw,43px);
+            line-height: 1.2;
+        }
+
+        .login-intro p {
+            max-width: 490px;
+            color: #5d6481;
+            line-height: 1.8;
+        }
+
+        .login-accent {
+            width: 80px;
+            height: 5px;
+            margin: 22px 0;
+            border-radius: 5px;
+            background: linear-gradient(90deg,var(--purple),var(--gold));
+        }
+
+        .login-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 18px;
+            color: #34345f;
+        }
+
+        .feature-icon {
+            width: 38px;
+            height: 38px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--purple);
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-weight: bold;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 430px;
+            padding: 36px;
+            background: white;
+            border: 1px solid var(--border);
+            border-top: 5px solid var(--gold);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(8,11,53,.12);
+            transition: box-shadow .25s, transform .25s;
+        }
+
+        .login-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 25px 55px rgba(75,25,168,.16);
+        }
+
+        .login-icon {
+            width: 66px;
+            height: 66px;
+            margin: 0 auto 20px;
+            background: #fff0c9;
+            color: var(--navy);
+            border: 1px solid #f6df9f;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .login-card h1 {
+            text-align: center;
+            color: var(--navy);
+            font-size: 27px;
+            margin: 0 0 8px;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .login-form-group { margin-bottom: 18px; }
+
+        .login-form-group label {
+            display: block;
+            color: var(--navy);
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .login-input-wrapper { position: relative; }
+
+        .login-input {
+            display: block;
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #d8d1ed;
+            border-radius: 10px;
+            background: #fcfbff;
+            color: var(--navy);
+            font-size: 14px;
+            outline: none;
+            transition: .2s;
+        }
+
+        .login-input:focus {
+            background: white;
+            border-color: var(--purple);
+            box-shadow: 0 0 0 3px rgba(75,25,168,.12);
+        }
+
+        .password-input { padding-right: 75px; }
+
+        .show-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: var(--purple);
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .login-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 5px 0 22px;
+            font-size: 12px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--muted);
+        }
+
+        .remember-me input { accent-color: var(--purple); }
+
+        .forgot-password {
+            color: var(--purple);
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .forgot-password:hover,
+        .back-home:hover { text-decoration: underline; }
+
+        .login-button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: var(--purple);
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 14px rgba(75,25,168,.18);
+            transition: .2s;
+        }
+
+        .login-button:hover {
+            background: var(--navy);
+            box-shadow: 0 8px 18px rgba(8,11,53,.2);
+            transform: translateY(-1px);
+        }
+
+        .login-button:disabled {
+            opacity: .65;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .login-message {
+            display: none;
+            margin-top: 18px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            text-align: center;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .login-message.error {
+            display: block;
+            background: #fff0f0;
+            color: #a12828;
+            border: 1px solid #ffd0d0;
+        }
+
+        .login-message.success {
+            display: block;
+            background: #effaf4;
+            color: #167348;
+            border: 1px solid #c8efd8;
+        }
+
+        .security-note {
+            margin-top: 25px;
+            padding: 15px;
+            border-top: 1px solid var(--border);
+            border-radius: 0 0 8px 8px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.7;
+            background: #fcfbff;
+        }
+
+        .back-home {
+            display: block;
+            text-align: center;
+            margin-top: 18px;
+            color: var(--purple);
+            font-size: 13px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .login-footer {
+            text-align: center;
+            padding: 20px;
+            color: #e1def6;
+            background: var(--navy);
+            border-top: 4px solid var(--gold);
+            font-size: 12px;
+        }
+
+        @media (max-width: 900px) {
+            .login-layout {
+                max-width: 520px;
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .login-intro {
+                text-align: center;
+                padding: 5px 0;
+            }
+
+            .login-intro p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .login-accent {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .login-feature {
+                max-width: 340px;
+                margin-left: auto;
+                margin-right: auto;
+                text-align: left;
+            }
+
+            .login-card { margin: 0 auto; }
+        }
+
+        @media (max-width: 500px) {
+            .login-navbar { padding: 14px 18px; }
+            .login-card { padding: 28px 22px; }
+            .login-card h1 { font-size: 24px; }
+            .login-options { align-items: flex-start; }
+            .login-page { padding: 30px 16px; }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="login-navbar">
+        <a href="index.html">
+            <div class="login-logo">CS</div>
+            <div>
+                <strong>EECP Computer Science</strong>
+                <small>Department Administration</small>
+            </div>
+        </a>
+    </header>
+
+    <main class="login-page">
+        <div class="login-layout">
+
+            <section class="login-intro">
+                <span class="login-eyebrow">ADMINISTRATOR PORTAL</span>
+                <h2>Manage Your Department Website</h2>
+                <div class="login-accent"></div>
+
+                <p>
+                    Sign in to access the administration area of the EECP
+                    Computer Science Department website. Authorized
+                    administrators can manage website content through the
+                    department dashboard.
+                </p>
+
+                <div class="login-feature">
+                    <div class="feature-icon">✓</div>
+                    <span>Protected administrator access</span>
+                </div>
+
+                <div class="login-feature">
+                    <div class="feature-icon">✎</div>
+                    <span>Website content management</span>
+                </div>
+
+                <div class="login-feature">
+                    <div class="feature-icon">↻</div>
+                    <span>Manage department updates</span>
+                </div>
+            </section>
+
+            <section class="login-card">
+                <div class="login-icon" aria-hidden="true">🔐</div>
+                <h1>Administrator Login</h1>
+
+                <p class="login-subtitle">
+                    Sign in to manage the EECP Computer Science Department website.
+                </p>
+
+                <form id="adminLoginForm">
+                    <div class="login-form-group">
+                        <label for="adminEmail">Email Address</label>
+                        <input
+                            type="email"
+                            id="adminEmail"
+                            class="login-input"
+                            placeholder="admin@example.com"
+                            autocomplete="username"
+                            required
+                        >
+                    </div>
+
+                    <div class="login-form-group">
+                        <label for="adminPassword">Password</label>
+                        <div class="login-input-wrapper">
+                            <input
+                                type="password"
+                                id="adminPassword"
+                                class="login-input password-input"
+                                placeholder="Enter your password"
+                                autocomplete="current-password"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                class="show-password"
+                                id="showPassword"
+                                aria-controls="adminPassword"
+                                aria-pressed="false"
+                            >Show</button>
+                        </div>
+                    </div>
+
+                    <div class="login-options">
+                        <label class="remember-me">
+                            <input type="checkbox" id="rememberMe">
+                            <span>Remember me</span>
+                        </label>
+
+                        <a href="#" class="forgot-password" id="forgotPassword">
+                            Forgot password?
+                        </a>
+                    </div>
+
+                    <button type="submit" class="login-button" id="loginButton">
+                        Sign In
+                    </button>
+
+                    <div
+                        id="loginMessage"
+                        class="login-message"
+                        role="status"
+                        aria-live="polite"
+                    ></div>
+                </form>
+
+                <div class="security-note">
+                    🔒 Administrator access only.<br>
+                    Authorized personnel are responsible for protecting
+                    their login credentials.
+                </div>
+
+                <a href="index.html" class="back-home">
+                    ← Back to Department Website
+                </a>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="login-footer">
+        © <span id="loginYear"></span>
+        EECP Computer Science Department
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+
+    <script>
+        document.getElementById("loginYear").textContent =
+            new Date().getFullYear();
+
+        const passwordInput = document.getElementById("adminPassword");
+        const showPasswordButton = document.getElementById("showPassword");
+
+        showPasswordButton.addEventListener("click", function () {
+            const showing = passwordInput.type === "password";
+            passwordInput.type = showing ? "text" : "password";
+            showPasswordButton.textContent = showing ? "Hide" : "Show";
+            showPasswordButton.setAttribute("aria-pressed", String(showing));
+        });
+
+        document.getElementById("forgotPassword").addEventListener(
+            "click",
+            async function (event) {
+                event.preventDefault();
+
+                const email = document.getElementById("adminEmail").value.trim();
+                const message = document.getElementById("loginMessage");
+
+                if (!email) {
+                    message.textContent = "Enter your email address first.";
+                    message.className = "login-message error";
+                    document.getElementById("adminEmail").focus();
+                    return;
+                }
+
+                if (
+                    !window.supabaseClient ||
+                    !window.supabaseClient.auth ||
+                    typeof window.supabaseClient.auth.resetPasswordForEmail !== "function"
+                ) {
+                    message.textContent =
+                        "Password recovery is unavailable. Check your Supabase configuration.";
+                    message.className = "login-message error";
+                    return;
+                }
+
+                try {
+                    const redirectTo =
+                        window.location.origin +
+                        window.location.pathname.replace(
+                            "admin-login.html",
+                            "reset-password.html"
+                        );
+
+                    const { error } =
+                        await window.supabaseClient.auth.resetPasswordForEmail(
+                            email,
+                            { redirectTo }
+                        );
+
+                    if (error) throw error;
+
+                    message.textContent =
+                        "If recovery is configured for this account, check your email for a reset link.";
+                    message.className = "login-message success";
+                } catch (error) {
+                    message.textContent =
+                        error.message || "Password recovery failed.";
+                    message.className = "login-message error";
+                }
+            }
+        );
+    </script>
+</body>
+</html>

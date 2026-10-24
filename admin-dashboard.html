@@ -1,0 +1,506 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="EECP Computer Science Department Administration Dashboard">
+    <title>Admin Dashboard | EECP Computer Science</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        :root {
+            --navy: #080B35;
+            --purple: #4B19A8;
+            --gold: #FFBF3C;
+            --lavender: #F6F4FF;
+            --border: #DED8F5;
+            --muted: #68708D;
+            --white: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--lavender);
+            color: var(--navy);
+        }
+
+        /* HEADER */
+        .admin-header {
+            background: var(--navy);
+            color: white;
+            padding: 20px 4%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 5px solid var(--gold);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .brand-icon {
+            width: 65px;
+            height: 65px;
+            flex-shrink: 0;
+            border-radius: 18px;
+            background: var(--gold);
+            color: var(--navy);
+            display: grid;
+            place-items: center;
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+        .admin-header h1 {
+            font-size: 23px;
+            margin: 0;
+            color: white;
+        }
+
+        .admin-header p {
+            margin: 7px 0 0;
+            font-size: 14px;
+            color: #E1DEF6;
+        }
+
+        .logout-button {
+            padding: 13px 20px;
+            border: 0;
+            border-radius: 30px;
+            background: var(--gold);
+            color: var(--navy);
+            font-weight: 800;
+            cursor: pointer;
+            transition: background .2s, transform .2s;
+        }
+
+        .logout-button:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        .logout-button:focus-visible,
+        .dashboard-card:focus-visible {
+            outline: 3px solid var(--gold);
+            outline-offset: 4px;
+        }
+
+        /* MAIN DASHBOARD */
+        .dashboard {
+            width: 92%;
+            max-width: 1500px;
+            margin: 38px auto;
+        }
+
+        .welcome {
+            margin-bottom: 25px;
+        }
+
+        .welcome h2 {
+            font-size: clamp(28px, 4vw, 42px);
+            margin: 0 0 10px;
+            color: var(--navy);
+        }
+
+        .welcome p {
+            color: var(--muted);
+            margin: 0;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .status-message {
+            background: #FFF8E5;
+            border: 1px solid #F1D58A;
+            border-left: 5px solid var(--gold);
+            border-radius: 12px;
+            padding: 17px 20px;
+            margin-bottom: 28px;
+            line-height: 1.6;
+            color: var(--navy);
+        }
+
+        /* DASHBOARD CARDS */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .dashboard-card {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            min-height: 245px;
+            padding: 25px;
+            border-radius: 19px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 25px rgba(8, 11, 53, 0.05);
+            text-decoration: none;
+            color: inherit;
+            transition:
+                transform .2s ease,
+                box-shadow .2s ease,
+                border-color .2s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 14px 32px rgba(75, 25, 168, 0.12);
+            border-color: var(--purple);
+        }
+
+        .card-icon {
+            display: grid;
+            place-items: center;
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+            border-radius: 17px;
+            background: #FFF0C9;
+            font-size: 28px;
+        }
+
+        .dashboard-card h3 {
+            margin: 0 0 10px;
+            color: var(--navy);
+            font-size: 21px;
+        }
+
+        .dashboard-card p {
+            color: var(--muted);
+            line-height: 1.6;
+            font-size: 14px;
+            margin: 0 0 22px;
+            flex-grow: 1;
+        }
+
+        .manage-link {
+            color: var(--purple);
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .dashboard-card:hover .manage-link {
+            color: #321075;
+        }
+
+        /* FOOTER */
+        .dashboard-footer {
+            text-align: center;
+            padding: 27px 20px;
+            color: var(--muted);
+            font-size: 13px;
+            border-top: 1px solid var(--border);
+            background: rgba(255, 255, 255, .65);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1100px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 600px) {
+            .admin-header {
+                padding: 17px 4%;
+                gap: 10px;
+            }
+
+            .brand {
+                gap: 10px;
+            }
+
+            .brand-icon {
+                width: 49px;
+                height: 49px;
+                border-radius: 13px;
+                font-size: 19px;
+            }
+
+            .admin-header h1 {
+                font-size: 17px;
+            }
+
+            .admin-header p {
+                font-size: 11px;
+            }
+
+            .logout-button {
+                padding: 10px 12px;
+                font-size: 12px;
+            }
+
+            .dashboard {
+                width: 92%;
+                margin: 28px auto;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .dashboard-card {
+                min-height: 205px;
+                padding: 22px;
+            }
+
+            .status-message {
+                padding: 14px;
+            }
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="admin-header">
+        <div class="brand">
+            <div class="brand-icon" aria-hidden="true">CS</div>
+
+            <div>
+                <h1>EECP Computer Science</h1>
+                <p>Department Administration</p>
+            </div>
+        </div>
+
+        <button class="logout-button" id="logoutButton" type="button">
+            Sign Out
+        </button>
+    </header>
+
+    <!-- MAIN DASHBOARD -->
+    <main class="dashboard">
+
+        <section class="welcome">
+            <h2>Welcome, Administrator!</h2>
+            <p id="adminEmail">Checking your account...</p>
+        </section>
+
+        <div class="status-message" id="setupNotice"
+             role="status" aria-live="polite">
+            <strong>Admin Dashboard:</strong>
+            Select a section below to manage department content.
+        </div>
+
+        <!-- MANAGEMENT CARDS -->
+        <section class="dashboard-grid"
+                 aria-label="Department management sections">
+
+            <!-- ABOUT -->
+            <a href="./admin-about.html" class="dashboard-card">
+                <div class="card-icon" aria-hidden="true">🏛️</div>
+                <h3>About</h3>
+                <p>
+                    Edit the department background, Mission, Vision,
+                    Objectives, Department Values, and Commitment.
+                    Manage the About page logo and banner.
+                </p>
+                <span class="manage-link">Manage About →</span>
+            </a>
+
+            <!-- CONTACT -->
+            <a href="./admin-contact.html" class="dashboard-card">
+                <div class="card-icon" aria-hidden="true">✉️</div>
+                <h3>Contact</h3>
+                <p>
+                    Update the department email, phone number, office
+                    address, office hours, Facebook page, map link,
+                    and contact page content.
+                </p>
+                <span class="manage-link">Manage Contact →</span>
+            </a>
+
+            <!-- NEWS -->
+            <a href="./admin-news.html" class="dashboard-card">
+                <div class="card-icon" aria-hidden="true">📰</div>
+                <h3>News</h3>
+                <p>
+                    Manage department announcements and news articles.
+                </p>
+                <span class="manage-link">Manage News →</span>
+            </a>
+
+            <!-- EVENTS -->
+            <a href="./admin-events.html" class="dashboard-card">
+                <div class="card-icon" aria-hidden="true">📅</div>
+                <h3>Events</h3>
+                <p>
+                    Organize seminars, activities, and upcoming events.
+                </p>
+                <span class="manage-link">Manage Events →</span>
+            </a>
+
+            <!-- PROGRAMS -->
+            <a href="./admin-programs.html" class="dashboard-card">
+                <div class="card-icon" aria-hidden="true">🎓</div>
+                <h3>Programs</h3>
+                <p>
+                    Manage information about academic programs.
+                </p>
+                <span class="manage-link">Manage Programs →</span>
+            </a>
+
+            <!-- FACULTY -->
+            <a href="./admin-faculty.html" class="dashboard-card">
+                <div class="card-icon" aria-hidden="true">👥</div>
+                <h3>Faculty</h3>
+                <p>
+                    Maintain faculty profiles and department information.
+                </p>
+                <span class="manage-link">Manage Faculty →</span>
+            </a>
+
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="dashboard-footer">
+        &copy; <span id="year"></span>
+        EECP Computer Science Department
+    </footer>
+
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+
+    <script>
+        "use strict";
+
+        const client = window.supabaseClient;
+
+        document.getElementById("year").textContent =
+            new Date().getFullYear();
+
+        async function checkLogin() {
+            const email = document.getElementById("adminEmail");
+            const notice = document.getElementById("setupNotice");
+            const grid = document.querySelector(".dashboard-grid");
+
+            try {
+                if (!client) {
+                    throw new Error(
+                        "Supabase client is not configured. Check js/config.js."
+                    );
+                }
+
+                const { data, error } = await client.auth.getUser();
+
+                if (error || !data.user) {
+                    window.location.replace("./admin-login.html");
+                    return;
+                }
+
+                const {
+                    data: adminRecord,
+                    error: adminError
+                } = await client
+                    .from("admins")
+                    .select("user_id")
+                    .eq("user_id", data.user.id)
+                    .maybeSingle();
+
+                if (adminError) {
+                    console.error(
+                        "Admin verification failed:",
+                        adminError
+                    );
+
+                    email.textContent =
+                        "Unable to verify admin access.";
+
+                    notice.textContent =
+                        "Admin verification failed. Check your admins table and database permissions.";
+
+                    grid.hidden = true;
+                    return;
+                }
+
+                if (!adminRecord) {
+                    await client.auth.signOut();
+                    window.location.replace("./admin-login.html");
+                    return;
+                }
+
+                email.textContent =
+                    data.user.email || "Administrator";
+
+                notice.replaceChildren();
+
+                const strong = document.createElement("strong");
+                strong.textContent = "Admin Dashboard: ";
+
+                notice.append(
+                    strong,
+                    document.createTextNode(
+                        "You are signed in. Select a section below to manage department content."
+                    )
+                );
+
+            } catch (error) {
+                console.error("Dashboard authorization error:", error);
+
+                email.textContent =
+                    "Unable to connect to the authentication service.";
+
+                notice.textContent =
+                    "Check your Supabase configuration and internet connection.";
+
+                grid.hidden = true;
+            }
+        }
+
+        document.getElementById("logoutButton").addEventListener(
+            "click",
+            async function () {
+                if (!client) {
+                    alert("Supabase is not configured.");
+                    return;
+                }
+
+                this.disabled = true;
+                this.textContent = "Signing Out...";
+
+                try {
+                    const { error } = await client.auth.signOut();
+
+                    if (error) {
+                        throw error;
+                    }
+
+                    window.location.replace("./admin-login.html");
+
+                } catch (error) {
+                    console.error("Sign-out error:", error);
+                    alert("Unable to sign out. Please try again.");
+
+                    this.disabled = false;
+                    this.textContent = "Sign Out";
+                }
+            }
+        );
+
+        checkLogin();
+    </script>
+
+</body>
+</html>

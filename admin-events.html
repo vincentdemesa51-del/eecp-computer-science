@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events Management | EECP Computer Science</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+    :root {
+      --navy: #080B35;
+      --purple: #4B19A8;
+      --gold: #FFBF3C;
+      --lavender: #F6F4FF;
+      --border: #DED8F5;
+      --muted: #68708D;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--lavender);
+      color: var(--navy);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 20px 4%;
+      color: white;
+      background: var(--navy);
+      border-bottom: 5px solid var(--gold);
+    }
+
+    .brand { display: flex; align-items: center; gap: 15px; }
+
+    .brand-icon {
+      display: grid;
+      place-items: center;
+      width: 60px;
+      height: 60px;
+      border-radius: 15px;
+      color: var(--navy);
+      background: var(--gold);
+      font-size: 23px;
+      font-weight: 900;
+    }
+
+    .brand h2 { margin: 0 0 7px; font-size: 22px; }
+    .brand p { margin: 0; color: #E1DEF6; }
+
+    .admin-badge {
+      padding: 12px 18px;
+      border-radius: 25px;
+      color: var(--navy);
+      background: var(--gold);
+      font-weight: bold;
+    }
+
+    main {
+      width: min(1400px, 94%);
+      margin: 32px auto 60px;
+    }
+
+    .page-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .page-heading h1 {
+      margin: 0 0 10px;
+      font-size: clamp(27px, 4vw, 42px);
+    }
+
+    .page-heading p,
+    .muted {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .page-actions,
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 16px;
+      border: 0;
+      border-radius: 9px;
+      font-size: 14px;
+      font-weight: bold;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .primary { background: var(--purple); color: white; }
+    .secondary { background: #EEE8FF; color: var(--purple); }
+    .danger { background: #FFF0F0; color: #A12828; }
+    .gold { background: var(--gold); color: var(--navy); }
+
+    button:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .panel {
+      margin-bottom: 24px;
+      padding: 26px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: white;
+      box-shadow: 0 8px 25px #080B350B;
+    }
+
+    .panel-title {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 22px;
+    }
+
+    .panel-icon {
+      display: grid;
+      place-items: center;
+      width: 52px;
+      height: 52px;
+      flex-shrink: 0;
+      border-radius: 14px;
+      background: #FFF0C9;
+      font-size: 24px;
+    }
+
+    .panel-title h2 { margin: 0 0 7px; font-size: 25px; }
+    .panel-title p { margin: 0; color: var(--muted); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+    }
+
+    .subpanel {
+      min-width: 0;
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #FCFBFF;
+    }
+
+    .subpanel h3 { margin-top: 0; }
+
+    label {
+      display: block;
+      margin: 17px 0 8px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="file"],
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #D8D1ED;
+      border-radius: 9px;
+      background: #FCFBFF;
+      color: var(--navy);
+      font: inherit;
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    input[type="file"] { margin-bottom: 8px; }
+
+    .checkbox {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .checkbox input { width: 18px; height: 18px; }
+
+    .preview {
+      max-width: 100%;
+      max-height: 220px;
+      margin-top: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      object-fit: contain;
+    }
+
+    .logo-preview { width: 140px; height: 140px; border-radius: 50%; }
+    .banner-preview { width: 100%; }
+
+    #message {
+      margin: 15px 0;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .status-message { color: #16703C; }
+    .error { color: #B42318 !important; }
+
+    .hint {
+      padding: 13px 15px;
+      border-left: 4px solid var(--gold);
+      border-radius: 8px;
+      background: #F1EAFF;
+      line-height: 1.6;
+    }
+
+    .image-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .image-card { position: relative; min-width: 0; }
+
+    .image-card img {
+      width: 100%;
+      height: 125px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .image-card small,
+    .video-card small {
+      display: block;
+      margin-top: 6px;
+      overflow-wrap: anywhere;
+      color: var(--muted);
+    }
+
+    .video-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 15px 0;
+    }
+
+    .video-card {
+      min-width: 0;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: white;
+    }
+
+    .video-card video {
+      display: block;
+      width: 100%;
+      max-height: 260px;
+      background: var(--navy);
+      border-radius: 8px;
+    }
+
+    .event-item {
+      margin-top: 16px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow-wrap: anywhere;
+      background: #fff;
+    }
+
+    .event-item h3 { margin: 0 0 10px; font-size: 21px; }
+    .event-item p { white-space: pre-wrap; line-height: 1.65; }
+
+    .event-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+      margin: 15px 0;
+    }
+
+    .event-gallery img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .event-item video {
+      display: block;
+      width: 100%;
+      max-width: 520px;
+      max-height: 320px;
+      border-radius: 10px;
+      margin: 14px 0;
+      background: var(--navy);
+    }
+
+    .event-item .actions { margin-top: 12px; }
+
+    .status {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 25px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .published { background: #E8F8EF; color: #167348; }
+    .draft { background: #FFF4D6; color: #8A5700; }
+
+    #imagePreview,
+    #videoPreview {
+      margin-top: 12px;
+    }
+
+    [hidden] { display: none !important; }
+
+    @media (max-width: 750px) {
+      .grid { grid-template-columns: 1fr; }
+      .topbar { padding: 16px 4%; }
+      .brand h2 { font-size: 17px; }
+      .brand-icon { width: 48px; height: 48px; }
+      .admin-badge { padding: 9px; font-size: 11px; }
+      .panel { padding: 18px; }
+      .page-heading { align-items: flex-start; }
+      .page-actions .btn { width: 100%; text-align: center; }
+    }
+    </style>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">CS</div>
+            <div>
+                <h2>EECP Computer Science</h2>
+                <p>Department Administration</p>
+            </div>
+        </div>
+        <div class="admin-badge">ADMIN PANEL</div>
+    </header>
+
+    <main>
+        <!-- PAGE HEADING -->
+        <div class="page-heading">
+            <div>
+                <h1>Events Management</h1>
+                <p>
+                    Manage department events, schedules, locations,
+                    photos, videos, and website branding.
+                </p>
+            </div>
+
+            <div class="actions" style="margin-top: 0;">
+                <a class="btn secondary" href="./events.html" target="_blank" rel="noopener">
+                    ↗ View Public Events Page
+                </a>
+                <a class="btn primary" href="./admin-dashboard.html">
+                    ← Back to Dashboard
+                </a>
+            </div>
+        </div>
+
+        <div id="message" role="status" aria-live="polite"></div>
+
+        <!-- WEBSITE BRANDING -->
+        <section class="panel">
+            <div class="panel-title">
+                <div class="panel-icon">✦</div>
+                <div>
+                    <h2>Website Branding</h2>
+                    <p>Upload or remove the website logo and banner independently.</p>
+                </div>
+            </div>
+
+            <div class="grid">
+                <!-- COLLEGE LOGO -->
+                <div class="subpanel">
+                    <h3>College Logo</h3>
+                    <p class="muted">
+                        Used for the college or department website logo.
+                    </p>
+
+                    <label for="logoFile">Choose logo image</label>
+                    <input id="logoFile" type="file" accept="image/jpeg,image/png,image/webp">
+                    <p class="muted">JPG, PNG, WebP. Maximum size: 5 MB.</p>
+
+                    <img id="logoPreview" class="preview logo-preview" alt="Logo preview" hidden>
+
+                    <div class="actions">
+                        <button class="btn primary" id="saveLogo" type="button">Upload / Save Logo</button>
+                        <button class="btn danger" id="removeLogo" type="button">Remove Logo</button>
+                    </div>
+                </div>
+
+                <!-- EVENTS BANNER -->
+                <div class="subpanel">
+                    <h3>Events Page Banner</h3>
+                    <p class="muted">
+                        This banner appears only on the public Events page
+                        and does not change the News page banner.
+                    </p>
+
+                    <label for="bannerFile">Choose banner image</label>
+                    <input id="bannerFile" type="file" accept="image/jpeg,image/png,image/webp">
+                    <p class="muted">JPG, PNG, WebP. Maximum size: 5 MB.</p>
+
+                    <img id="bannerPreview" class="preview banner-preview" alt="Events banner preview" hidden>
+
+                    <div class="actions">
+                        <button class="btn primary" id="saveBanner" type="button">Upload / Save Banner</button>
+                        <button class="btn danger" id="removeBanner" type="button">Remove Banner</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn secondary" id="reloadBranding" type="button">Reload Saved Branding</button>
+            </div>
+
+            <p class="hint">
+                Branding uses the <code>site_branding</code> table
+                (row ID 1) and <code>site-branding</code> Storage bucket.
+                The public Events page must read
+                <code>events_banner_url</code>, while the News page
+                must read <code>news_banner_url</code>.
+            </p>
+        </section>
+
+        <!-- ADD OR EDIT EVENT: ONLY ONE FORM -->
+        <section class="panel">
+            <div class="panel-title">
+                <div class="panel-icon">📅</div>
+                <div>
+                    <h2 id="formHeading">Add Event</h2>
+                    <p>Create an event with its date, venue, description, photos, and videos.</p>
+                </div>
+            </div>
+
+            <form id="eventForm">
+                <input type="hidden" id="eventId">
+
+                <label for="title">Event Title *</label>
+                <input id="title" type="text" maxlength="200" required placeholder="Enter the event title">
+
+                <label for="description">Event Description *</label>
+                <textarea id="description" required placeholder="Write event details..."></textarea>
+
+                <div class="grid">
+                    <div>
+                        <label for="eventDate">Event Date</label>
+                        <input id="eventDate" type="date">
+                    </div>
+                    <div>
+                        <label for="location">Location / Venue</label>
+                        <input id="location" type="text" maxlength="250" placeholder="Enter venue or location">
+                    </div>
+                </div>
+
+                <!-- EVENT IMAGE UPLOAD -->
+                <label for="imageFileEvent">Upload Event Photos (optional)</label>
+                <input id="imageFileEvent" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple>
+
+                <p class="muted">
+                    Choose multiple JPG, PNG, WebP, or GIF images.
+                    Maximum size: 5 MB per image. When editing,
+                    newly selected photos are added to the existing gallery.
+                </p>
+
+                <div id="imagePreview"></div>
+
+                <!-- EVENT VIDEO UPLOAD -->
+                <label for="videoFileEvent">Upload Event Videos (optional)</label>
+                <input id="videoFileEvent" type="file" accept="video/mp4,video/webm,video/ogg" multiple>
+
+                <p class="muted">
+                    Choose MP4, WebM, or OGG videos.
+                    Images and videos can be selected together or separately.
+                    Maximum size: 50 MB per video.
+                </p>
+
+                <div id="videoPreview"></div>
+                <div id="uploadProgress" class="muted" aria-live="polite"></div>
+
+                <label class="checkbox">
+                    <input id="published" type="checkbox" checked>
+                    Publish this event on the public Events page
+                </label>
+
+                <div class="actions">
+                    <button class="btn primary" id="saveEvent" type="submit">Save Event</button>
+                    <button class="btn secondary" id="cancelEdit" type="button" hidden>Cancel Edit</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- EXISTING EVENTS -->
+        <section class="panel">
+            <div class="panel-title">
+                <div class="panel-icon">📋</div>
+                <div>
+                    <h2>Existing Events</h2>
+                    <p>Review, edit, publish, or delete department events.</p>
+                </div>
+            </div>
+
+            <div id="eventsList">Loading events...</div>
+        </section>
+    </main>
+
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+
+    <script>
+    (() => {
+        "use strict";
+
+        const db = window.supabaseClient;
+        const $ = id => document.getElementById(id);
+
+        let user = null;
+
+        let branding = {
+            logo_url: null,
+            events_banner_url: null
+        };
+
+        let logoFile = null;
+        let bannerFile = null;
+        let logoUrl = null;
+        let bannerUrl = null;
+
+        let selectedImages = [];
+        let currentImages = [];
+        let selectedVideos = [];
+        let currentVideos = [];
+        let previewUrls = [];
+        let videoPreviewUrls = [];
+
+        /* GENERAL HELPERS */
+        
+function generateUUID() {
+    if (
+        typeof crypto !== "undefined" &&
+        typeof crypto.randomUUID === "function"
+    ) {
+        return crypto.randomUUID();
+    }
+
+    if (
+        typeof crypto !== "undefined" &&
+        typeof crypto.getRandomValues === "function"
+    ) {
+        const bytes = new Uint8Array(16);
+        crypto.getRandomValues(bytes);
+
+        bytes[6] = (bytes[6] & 0x0f) | 0x40;
+        bytes[8] = (bytes[8] & 0x3f) | 0x80;
+
+        const hex = Array.from(bytes, byte =>
+            byte.toString(16).padStart(2, "0")
+        ).join("");
+
+        return [
+            hex.slice(0, 8),
+            hex.slice(8, 12),
+            hex.slice(12, 16),
+            hex.slice(16, 20),
+            hex.slice(20)
+        ].join("-");
+    }
+
+    throw new Error(
+        "Secure UUID generation is unavailable. Please use a supported browser and secure connection."
+    );
+}
+
+        function msg(text, error = false) {
+            $("message").textContent = text;
+            $("message").className = error ? "error" : "status-message";
+        }
+
+        function safeUrl(value) {
+            try {
+                const url = new URL(value, location.href);
+                return ["http:", "https:", "blob:"].includes(url.protocol)
+                    ? url.href
+                    : "";
+            } catch {
+                return "";
+            }
+        }
+
+        function validateImage(file, label, allowGif = false) {
+            if (!file) throw Error("Please choose an image first.");
+
+            const allowedTypes = allowGif
+                ? ["image/jpeg", "image/png", "image/webp", "image/gif"]
+                : ["image/jpeg", "image/png", "image/webp"];
+
+            if (!allowedTypes.includes(file.type)) {
+                throw Error(
+                    label + " must be JPG, PNG" +
+                    (allowGif ? ", WebP, or GIF." : ", or WebP.")
+                );
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                throw Error(label + " must be 5 MB or smaller.");
+            }
+        }
+
+        const MAX_VIDEO_SIZE = 50 * 1024 * 1024;
+
+        function validateVideo(file) {
+            const allowedTypes = ["video/mp4", "video/webm", "video/ogg"];
+
+            if (!allowedTypes.includes(file.type)) {
+                throw Error("Video must be MP4, WebM, or OGG format.");
+            }
+
+            if (file.size > MAX_VIDEO_SIZE) {
+                throw Error("Each video must be 50 MB or smaller.");
+            }
+        }
+
+        function setPreview(element, url) {
+            const validUrl = safeUrl(url);
+
+            if (!validUrl) {
+                element.removeAttribute("src");
+                element.hidden = true;
+                return;
+            }
+
+            element.src = validUrl;
+            element.hidden = false;
+        }
+
+        /* STORAGE HELPERS */
+        async function uploadImage(bucket, file, prefix, allowGif = false) {
+            validateImage(file, prefix, allowGif);
+
+            const extensions = {
+                "image/jpeg": "jpg",
+                "image/png": "png",
+                "image/webp": "webp",
+                "image/gif": "gif"
+            };
+
+            
+const path = user.id + "/" + prefix + "-" +
+    generateUUID() + "." + extensions[file.type];
+
+
+            const { data, error } = await db.storage
+                .from(bucket)
+                .upload(path, file, {
+                    contentType: file.type,
+                    upsert: false
+                });
+
+            if (error) throw error;
+
+            const { data: publicData } = db.storage
+                .from(bucket)
+                .getPublicUrl(data.path);
+
+            return {
+                url: publicData.publicUrl,
+                path: data.path
+            };
+        }
+
+        async function uploadVideo(file) {
+            validateVideo(file);
+
+            const extension = {
+                "video/mp4": "mp4",
+                "video/webm": "webm",
+                "video/ogg": "ogv"
+            }[file.type];
+
+            
+const path = user.id + "/event-" +
+    generateUUID() + "." + extension;
+
+
+            $("uploadProgress").textContent = "Uploading video: " + file.name + "...";
+
+            const { data, error } = await db.storage
+                .from("event-videos")
+                .upload(path, file, {
+                    contentType: file.type,
+                    upsert: false
+                });
+
+            if (error) throw error;
+
+            const { data: publicData } = db.storage
+                .from("event-videos")
+                .getPublicUrl(data.path);
+
+            $("uploadProgress").textContent = "Uploaded: " + file.name;
+
+            return {
+                url: publicData.publicUrl,
+                path: data.path
+            };
+        }
+
+        async function deleteStored(bucket, url) {
+            try {
+                const parsedUrl = new URL(url);
+                const marker = "/storage/v1/object/public/" + bucket + "/";
+                const index = parsedUrl.pathname.indexOf(marker);
+
+                if (index < 0) return;
+
+                const path = decodeURIComponent(
+                    parsedUrl.pathname.slice(index + marker.length)
+                );
+
+                const { error } = await db.storage.from(bucket).remove([path]);
+                if (error) throw error;
+            } catch (error) {
+                console.warn("Storage cleanup:", error);
+            }
+        }
+
+        /* ADMIN AUTHENTICATION */
+        async function init() {
+            if (!db) {
+                throw Error("Supabase client missing. Check js/config.js.");
+            }
+
+            const { data, error } = await db.auth.getUser();
+
+            if (error || !data.user) {
+                location.replace("./admin-login.html");
+                return;
+            }
+
+            user = data.user;
+
+            const { data: admin, error: adminError } = await db
+                .from("admins")
+                .select("user_id")
+                .eq("user_id", user.id)
+                .maybeSingle();
+
+            if (adminError || !admin) {
+                await db.auth.signOut();
+                location.replace("./admin-login.html");
+                return;
+            }
+
+            await loadBranding();
+            await loadEvents();
+        }
+
+        /* BRANDING */
+        async function loadBranding() {
+            const { data, error } = await db
+                .from("site_branding")
+                .select("logo_url,events_banner_url")
+                .eq("id", 1)
+                .maybeSingle();
+
+            if (error) throw error;
+
+            branding = data || {
+                logo_url: null,
+                events_banner_url: null
+            };
+
+            setPreview($("logoPreview"), branding.logo_url);
+            setPreview($("bannerPreview"), branding.events_banner_url);
+        }
+
+        function bindBrandInput(kind) {
+            const input = $(kind + "File");
+            const isLogo = kind === "logo";
+
+            input.addEventListener("change", () => {
+                const file = input.files?.[0] || null;
+
+                if (isLogo) {
+                    logoFile = file;
+                    if (logoUrl) URL.revokeObjectURL(logoUrl);
+
+                    logoUrl = file ? URL.createObjectURL(file) : null;
+
+                    if (logoUrl) setPreview($("logoPreview"), logoUrl);
+                    else setPreview($("logoPreview"), branding.logo_url);
+                } else {
+                    bannerFile = file;
+                    if (bannerUrl) URL.revokeObjectURL(bannerUrl);
+
+                    bannerUrl = file ? URL.createObjectURL(file) : null;
+
+                    if (bannerUrl) setPreview($("bannerPreview"), bannerUrl);
+                    else setPreview($("bannerPreview"), branding.events_banner_url);
+                }
+            });
+        }
+
+        async function saveBrandImage(kind) {
+            const isLogo = kind === "logo";
+            const file = isLogo ? logoFile : bannerFile;
+
+            if (!file) {
+                msg("Please choose an image first.", true);
+                return;
+            }
+
+            const button = isLogo ? $("saveLogo") : $("saveBanner");
+            button.disabled = true;
+
+            try {
+                validateImage(file, isLogo ? "Logo" : "Banner");
+
+                const uploaded = await uploadImage(
+                    "site-branding",
+                    file,
+                    isLogo ? "college-logo" : "events-banner"
+                );
+
+                const update = isLogo
+                    ? { logo_url: uploaded.url }
+                    : { events_banner_url: uploaded.url };
+
+                const { error } = await db
+                    .from("site_branding")
+                    .upsert({ id: 1, ...update }, { onConflict: "id" });
+
+                if (error) {
+                    await deleteStored("site-branding", uploaded.url);
+                    throw error;
+                }
+
+                if (isLogo) {
+                    branding.logo_url = uploaded.url;
+                    logoFile = null;
+                    $("logoFile").value = "";
+                } else {
+                    branding.events_banner_url = uploaded.url;
+                    bannerFile = null;
+                    $("bannerFile").value = "";
+                }
+
+                await loadBranding();
+                msg((isLogo ? "Logo" : "Events banner") + " saved successfully.");
+            } catch (error) {
+                msg("Could not save branding: " + error.message, true);
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        async function removeBrandImage(kind) {
+            const isLogo = kind === "logo";
+            const column = isLogo ? "logo_url" : "events_banner_url";
+            const oldUrl = isLogo ? branding.logo_url : branding.events_banner_url;
+
+            if (!confirm("Remove the " + (isLogo ? "logo" : "Events banner") + "?")) {
+                return;
+            }
+
+            const button = isLogo ? $("removeLogo") : $("removeBanner");
+            button.disabled = true;
+
+            try {
+                const { error } = await db
+                    .from("site_branding")
+                    .upsert({ id: 1, [column]: null }, { onConflict: "id" });
+
+                if (error) throw error;
+
+                if (oldUrl) await deleteStored("site-branding", oldUrl);
+
+                await loadBranding();
+                msg((isLogo ? "Logo" : "Events banner") + " removed.");
+            } catch (error) {
+                msg("Could not remove branding: " + error.message, true);
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        $("saveLogo").addEventListener("click", () => saveBrandImage("logo"));
+        $("removeLogo").addEventListener("click", () => removeBrandImage("logo"));
+        $("saveBanner").addEventListener("click", () => saveBrandImage("banner"));
+        $("removeBanner").addEventListener("click", () => removeBrandImage("banner"));
+
+        $("reloadBranding").addEventListener("click", async () => {
+            try {
+                await loadBranding();
+                msg("Saved branding reloaded.");
+            } catch (error) {
+                msg("Could not reload branding: " + error.message, true);
+            }
+        });
+
+        bindBrandInput("logo");
+        bindBrandInput("banner");
+
+        /* EVENT IMAGE GALLERY */
+        function showEventImages(urls, alt = "Event image preview") {
+            const box = $("imagePreview");
+            box.replaceChildren();
+            box.style.display = "grid";
+            box.style.gridTemplateColumns = "repeat(auto-fill, minmax(130px, 1fr))";
+            box.style.gap = "12px";
+            box.style.marginTop = "12px";
+
+            (urls || []).map(safeUrl).filter(Boolean).forEach((url, index) => {
+                const image = document.createElement("img");
+                image.className = "preview";
+                image.src = url;
+                image.alt = alt + " " + (index + 1);
+                image.style.width = "100%";
+                image.style.height = "130px";
+                image.style.objectFit = "cover";
+                image.style.margin = "0";
+                box.appendChild(image);
+            });
+        }
+
+        function readEventImages(event) {
+            let urls = [];
+
+            if (Array.isArray(event.image_urls)) {
+                urls = event.image_urls;
+            } else if (typeof event.image_urls === "string" && event.image_urls.trim()) {
+                try {
+                    const parsed = JSON.parse(event.image_urls);
+                    if (Array.isArray(parsed)) urls = parsed;
+                } catch {
+                    // Fall back to image_url.
+                }
+            }
+
+            if (!urls.length && event.image_url) urls = [event.image_url];
+
+            return [...new Set(urls.map(safeUrl).filter(Boolean))];
+        }
+
+        /* EVENT VIDEO GALLERY */
+        function readEventVideos(event) {
+            let urls = [];
+
+            if (Array.isArray(event.video_urls)) {
+                urls = event.video_urls;
+            } else if (typeof event.video_urls === "string" && event.video_urls.trim()) {
+                try {
+                    const parsed = JSON.parse(event.video_urls);
+                    if (Array.isArray(parsed)) urls = parsed;
+                } catch {
+                    // Fall back to video_url.
+                }
+            }
+
+            if (!urls.length && event.video_url) urls = [event.video_url];
+
+            return [...new Set(urls.map(safeUrl).filter(Boolean))];
+        }
+
+        function showEventVideos(urls) {
+            const box = $("videoPreview");
+            box.replaceChildren();
+            box.style.display = "grid";
+            box.style.gridTemplateColumns = "repeat(auto-fill, minmax(220px, 1fr))";
+            box.style.gap = "12px";
+            box.style.marginTop = "12px";
+
+            (urls || []).map(safeUrl).filter(Boolean).forEach((url, index) => {
+                const card = document.createElement("div");
+                card.className = "video-card";
+
+                const video = document.createElement("video");
+                video.src = url;
+                video.controls = true;
+                video.preload = "metadata";
+                video.playsInline = true;
+                video.setAttribute("aria-label", "Event video " + (index + 1));
+
+                const label = document.createElement("small");
+                label.textContent = "Video " + (index + 1);
+
+                card.append(video, label);
+                box.appendChild(card);
+            });
+        }
+
+        /* SELECT EVENT PHOTOS */
+        $("imageFileEvent").addEventListener("change", event => {
+            selectedImages = Array.from(event.target.files || []);
+
+            previewUrls.forEach(url => URL.revokeObjectURL(url));
+            previewUrls = [];
+
+            try {
+                selectedImages.forEach(file => validateImage(file, "Event image", true));
+
+                previewUrls = selectedImages.map(file => URL.createObjectURL(file));
+
+                showEventImages(
+                    [...currentImages, ...previewUrls],
+                    "Event image preview"
+                );
+
+                msg(selectedImages.length
+                    ? selectedImages.length + " new image(s) selected."
+                    : "No new images selected.");
+            } catch (error) {
+                selectedImages = [];
+                event.target.value = "";
+                showEventImages(currentImages);
+                msg(error.message, true);
+            }
+        });
+
+        /* SELECT EVENT VIDEOS */
+        $("videoFileEvent").addEventListener("change", event => {
+            selectedVideos = Array.from(event.target.files || []);
+
+            videoPreviewUrls.forEach(url => URL.revokeObjectURL(url));
+            videoPreviewUrls = [];
+
+            try {
+                selectedVideos.forEach(validateVideo);
+
+                videoPreviewUrls = selectedVideos.map(file => URL.createObjectURL(file));
+
+                showEventVideos([...currentVideos, ...videoPreviewUrls]);
+
+                msg(selectedVideos.length
+                    ? selectedVideos.length + " new video(s) selected."
+                    : "No new videos selected.");
+            } catch (error) {
+                selectedVideos = [];
+                event.target.value = "";
+                showEventVideos(currentVideos);
+                msg(error.message, true);
+            }
+        });
+
+        /* LOAD EVENTS */
+        async function loadEvents() {
+            const container = $("eventsList");
+            container.replaceChildren();
+
+            const { data, error } = await db
+                .from("events")
+                .select("*")
+                .order("event_date", { ascending: false });
+
+            if (error) {
+                msg("Could not load events: " + error.message, true);
+                return;
+            }
+
+            const events = data || [];
+
+            if (!events.length) {
+                const empty = document.createElement("p");
+                empty.textContent = "No events found.";
+                container.appendChild(empty);
+                return;
+            }
+
+            events.forEach(renderEvent);
+        }
+
+        /* RENDER EVENT */
+        function renderEvent(event) {
+            const container = $("eventsList");
+            const card = document.createElement("article");
+            card.className = "event-item";
+
+            const heading = document.createElement("h3");
+            heading.textContent = event.title || "Untitled event";
+            card.appendChild(heading);
+
+            const date = document.createElement("p");
+            date.textContent = "Date: " + (event.event_date || "Not specified");
+            card.appendChild(date);
+
+            const location = document.createElement("p");
+            location.textContent = "Location: " + (event.location || "Not specified");
+            card.appendChild(location);
+
+            const description = document.createElement("p");
+            description.textContent = event.description || "";
+            card.appendChild(description);
+
+            const imageUrls = readEventImages(event);
+
+            if (imageUrls.length) {
+                const imageHeading = document.createElement("h4");
+                imageHeading.textContent = "Images";
+                card.appendChild(imageHeading);
+
+                const imageGallery = document.createElement("div");
+                imageGallery.className = "event-gallery";
+
+                imageUrls.forEach((url, index) => {
+                    const image = document.createElement("img");
+                    image.src = url;
+                    image.alt = (event.title || "Event") + " image " + (index + 1);
+                    image.loading = "lazy";
+                    imageGallery.appendChild(image);
+                });
+
+                card.appendChild(imageGallery);
+            }
+
+            const videoUrls = readEventVideos(event);
+
+            if (videoUrls.length) {
+                const videoHeading = document.createElement("h4");
+                videoHeading.textContent = "Videos";
+                card.appendChild(videoHeading);
+
+                const videoGallery = document.createElement("div");
+                videoGallery.className = "video-gallery";
+
+                videoUrls.forEach((url, index) => {
+                    const videoCard = document.createElement("div");
+                    videoCard.className = "video-card";
+
+                    const video = document.createElement("video");
+                    video.src = url;
+                    video.controls = true;
+                    video.preload = "metadata";
+                    video.playsInline = true;
+                    video.setAttribute(
+                        "aria-label",
+                        (event.title || "Event") + " video " + (index + 1)
+                    );
+
+                    videoCard.appendChild(video);
+                    videoGallery.appendChild(videoCard);
+                });
+
+                card.appendChild(videoGallery);
+            }
+
+            const status = document.createElement("p");
+            status.className = "status " + (event.published ? "published" : "draft");
+            status.textContent = event.published ? "Published" : "Draft";
+            card.appendChild(status);
+
+            const actions = document.createElement("div");
+            actions.className = "actions";
+
+            const editButton = document.createElement("button");
+            editButton.type = "button";
+            editButton.className = "btn secondary";
+            editButton.textContent = "Edit";
+            editButton.addEventListener("click", () => editEvent(event));
+
+            const publishButton = document.createElement("button");
+            publishButton.type = "button";
+            publishButton.className = "btn gold";
+            publishButton.textContent = event.published ? "Unpublish" : "Publish";
+            publishButton.addEventListener("click", () => togglePublish(event));
+
+            const deleteButton = document.createElement("button");
+            deleteButton.type = "button";
+            deleteButton.className = "btn danger";
+            deleteButton.textContent = "Delete";
+            deleteButton.addEventListener("click", () => deleteEvent(event));
+
+            actions.append(editButton, publishButton, deleteButton);
+            card.appendChild(actions);
+            container.appendChild(card);
+        }
+
+        /* RESET EVENT FORM */
+        function resetEventForm() {
+            $("eventForm").reset();
+
+            selectedImages = [];
+            selectedVideos = [];
+            currentImages = [];
+            currentVideos = [];
+
+            previewUrls.forEach(url => URL.revokeObjectURL(url));
+            videoPreviewUrls.forEach(url => URL.revokeObjectURL(url));
+
+            previewUrls = [];
+            videoPreviewUrls = [];
+
+            $("imagePreview").replaceChildren();
+            $("videoPreview").replaceChildren();
+            $("uploadProgress").textContent = "";
+
+            $("formHeading").textContent = "Add Event";
+            $("saveEvent").textContent = "Save Event";
+            $("cancelEdit").hidden = true;
+
+            editingEvent = null;
+        }
+
+        let editingEvent = null;
+
+        /* EDIT EVENT */
+        function editEvent(event) {
+            editingEvent = event;
+
+            $("eventId").value = event.id || "";
+            $("title").value = event.title || "";
+            $("description").value = event.description || "";
+            $("eventDate").value = event.event_date || "";
+            $("location").value = event.location || "";
+            $("published").checked = Boolean(event.published);
+
+            currentImages = readEventImages(event);
+            currentVideos = readEventVideos(event);
+
+            selectedImages = [];
+            selectedVideos = [];
+
+            $("imageFileEvent").value = "";
+            $("videoFileEvent").value = "";
+
+            showEventImages(currentImages);
+            showEventVideos(currentVideos);
+
+            $("formHeading").textContent = "Edit Event";
+            $("saveEvent").textContent = "Update Event";
+            $("cancelEdit").hidden = false;
+
+            $("eventForm").scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+            msg("Editing event: " + (event.title || ""));
+        }
+
+        /* SAVE EVENT */
+        async function saveEvent(event) {
+            event.preventDefault();
+
+            const button = $("saveEvent");
+            button.disabled = true;
+
+            const uploadedImages = [];
+            const uploadedVideos = [];
+            const wasEditing = Boolean(editingEvent);
+
+            try {
+                const title = $("title").value.trim();
+                const description = $("description").value.trim();
+                const eventDate = $("eventDate").value;
+                const location = $("location").value.trim();
+
+                if (!title) throw Error("Please enter an event title.");
+
+                const imageUrls = [...currentImages];
+                const videoUrls = [...currentVideos];
+
+                for (const file of selectedImages) {
+                    validateImage(file, "Event image", true);
+
+                    const uploaded = await uploadImage(
+                        "event-images",
+                        file,
+                        "events",
+                        true
+                    );
+
+                    uploadedImages.push(uploaded.url);
+                    imageUrls.push(uploaded.url);
+                }
+
+                for (const file of selectedVideos) {
+                    validateVideo(file);
+
+                    const uploaded = await uploadVideo(file);
+
+                    uploadedVideos.push(uploaded.url);
+                    videoUrls.push(uploaded.url);
+                }
+
+                const payload = {
+                    title,
+                    description,
+                    event_date: eventDate || null,
+                    location: location || null,
+                    image_url: imageUrls[0] || null,
+                    image_urls: imageUrls,
+                    video_url: videoUrls[0] || null,
+                    video_urls: videoUrls,
+                    published: $("published").checked
+                };
+
+                let query;
+
+                if (editingEvent) {
+                    query = db
+                        .from("events")
+                        .update(payload)
+                        .eq("id", editingEvent.id);
+                } else {
+                    query = db
+                        .from("events")
+                        .insert(payload);
+                }
+
+                const { error } = await query;
+                if (error) throw error;
+
+                resetEventForm();
+                await loadEvents();
+
+                msg(wasEditing
+                    ? "Event updated successfully."
+                    : "Event saved successfully.");
+            } catch (error) {
+                for (const url of uploadedImages) {
+                    await deleteStored("event-images", url);
+                }
+
+                for (const url of uploadedVideos) {
+                    await deleteStored("event-videos", url);
+                }
+
+                msg("Could not save event: " + error.message, true);
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        /* PUBLISH / UNPUBLISH EVENT */
+        async function togglePublish(event) {
+            try {
+                const { error } = await db
+                    .from("events")
+                    .update({ published: !event.published })
+                    .eq("id", event.id);
+
+                if (error) throw error;
+
+                await loadEvents();
+                msg(event.published ? "Event unpublished." : "Event published.");
+            } catch (error) {
+                msg("Could not change publish status: " + error.message, true);
+            }
+        }
+
+        /* DELETE EVENT */
+        async function deleteEvent(event) {
+            if (!confirm("Delete this event and its uploaded media?")) return;
+
+            try {
+                const { error } = await db
+                    .from("events")
+                    .delete()
+                    .eq("id", event.id);
+
+                if (error) throw error;
+
+                for (const url of readEventImages(event)) {
+                    await deleteStored("event-images", url);
+                }
+
+                for (const url of readEventVideos(event)) {
+                    await deleteStored("event-videos", url);
+                }
+
+                await loadEvents();
+                msg("Event deleted successfully.");
+            } catch (error) {
+                msg("Could not delete event: " + error.message, true);
+            }
+        }
+
+        /* FORM BUTTONS */
+        $("eventForm").addEventListener("submit", saveEvent);
+        $("cancelEdit").addEventListener("click", resetEventForm);
+
+        /* CLEANUP PREVIEW URLS */
+        window.addEventListener("beforeunload", () => {
+            previewUrls.forEach(url => URL.revokeObjectURL(url));
+            videoPreviewUrls.forEach(url => URL.revokeObjectURL(url));
+
+            if (logoUrl) URL.revokeObjectURL(logoUrl);
+            if (bannerUrl) URL.revokeObjectURL(bannerUrl);
+        });
+
+        /* START PAGE */
+        init().catch(error => {
+            console.error(error);
+            msg("Initialization failed: " + error.message, true);
+        });
+    })();
+    </script>
+</body>
+</html>

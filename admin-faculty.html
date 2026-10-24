@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Manage EECP Computer Science Department faculty records and branding.">
+  <title>Admin Faculty | EECP Computer Science Department</title>
+
+  <style>
+    :root {
+      --navy: #080B35;
+      --purple: #4B19A8;
+      --gold: #FFBF3C;
+      --page: #f5f3fc;
+      --text: #292b46;
+      --muted: #73748b;
+      --border: #e4def4;
+      --success: #18794e;
+      --danger: #a12828;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--page);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+    button:disabled { opacity: .6; cursor: not-allowed; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      color: white;
+      background: var(--navy);
+      border-bottom: 4px solid var(--gold);
+      box-shadow: 0 5px 20px rgba(8,11,53,.16);
+    }
+
+    .topbar-inner {
+      width: min(1250px, 94%);
+      min-height: 82px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .brand-logo {
+      display: grid;
+      width: 52px;
+      height: 52px;
+      flex-shrink: 0;
+      place-items: center;
+      color: var(--navy);
+      background: var(--gold);
+      border-radius: 14px;
+      font-weight: 900;
+      font-size: 18px;
+    }
+
+    .brand-title {
+      margin: 0;
+      color: white;
+      font-size: 18px;
+      line-height: 1.3;
+    }
+
+    .brand-subtitle {
+      margin: 4px 0 0;
+      color: #d8d4f0;
+      font-size: 12px;
+    }
+
+    .admin-label {
+      padding: 7px 13px;
+      color: var(--navy);
+      background: var(--gold);
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .wrap {
+      width: min(1250px, 94%);
+      margin: 28px auto 60px;
+    }
+
+    .page-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 22px;
+    }
+
+    .page-heading h1 {
+      margin: 0 0 6px;
+      color: var(--navy);
+      font-size: clamp(27px, 4vw, 36px);
+      line-height: 1.2;
+    }
+
+    .page-heading p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* PAGE ACTION BUTTONS */
+    .page-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .back {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 42px;
+      padding: 11px 16px;
+      color: white;
+      background: var(--purple);
+      border: 1px solid var(--purple);
+      border-radius: 9px;
+      font-weight: 700;
+      font-size: 13px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background .2s ease, transform .2s ease;
+    }
+
+    .back:hover {
+      background: var(--navy);
+      border-color: var(--navy);
+      transform: translateY(-2px);
+    }
+
+    .back:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 3px;
+    }
+
+    .status {
+      display: none;
+      margin: 15px 0;
+      padding: 13px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      overflow-wrap: anywhere;
+    }
+
+    .status.success {
+      display: block;
+      color: var(--success);
+      background: #e9f8ef;
+      border: 1px solid #b9e7ca;
+    }
+
+    .status.error {
+      display: block;
+      color: var(--danger);
+      background: #fff0f0;
+      border: 1px solid #f2caca;
+    }
+
+    .panel {
+      margin: 20px 0;
+      padding: 27px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      box-shadow: 0 8px 25px rgba(8,11,53,.055);
+    }
+
+    .panel-heading {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .section-icon {
+      display: grid;
+      width: 46px;
+      height: 46px;
+      flex: 0 0 46px;
+      place-items: center;
+      color: var(--navy);
+      background: #fff0c8;
+      border-radius: 12px;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .panel h2 {
+      margin: 0 0 5px;
+      color: var(--navy);
+      font-size: 22px;
+      line-height: 1.35;
+    }
+
+    .panel-heading p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .subheading {
+      margin: 0 0 12px;
+      color: var(--navy);
+      font-size: 17px;
+    }
+
+    .hint {
+      margin-top: 22px;
+      padding: 15px 17px;
+      color: #4e426b;
+      background: #f6f1ff;
+      border: 1px solid #ded0fb;
+      border-left: 4px solid var(--purple);
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+
+    .branding-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 22px;
+    }
+
+    .branding-card {
+      min-width: 0;
+      padding: 22px;
+      background: #fcfbff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .branding-card h3 {
+      margin: 0 0 5px;
+      color: var(--navy);
+      font-size: 18px;
+    }
+
+    .branding-card > p {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    label {
+      display: block;
+      margin: 14px 0 7px;
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    input[type="text"],
+    input[type="file"],
+    textarea {
+      display: block;
+      width: 100%;
+      min-width: 0;
+      padding: 12px 13px;
+      color: var(--text);
+      background: #fcfbff;
+      border: 1px solid #d8d1e9;
+      border-radius: 9px;
+      outline: none;
+    }
+
+    input[type="file"] {
+      padding: 10px;
+      font-size: 13px;
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px rgba(75,25,168,.1);
+    }
+
+    textarea {
+      min-height: 125px;
+      resize: vertical;
+    }
+
+    small {
+      display: block;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .preview {
+      display: block;
+      max-width: 100%;
+      max-height: 240px;
+      margin-top: 14px;
+      object-fit: contain;
+      background: #f5f3fc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .logo-preview {
+      width: 145px;
+      height: 145px;
+      border-radius: 50%;
+    }
+
+    .banner-preview { width: 100%; }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 17px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 41px;
+      padding: 10px 15px;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 800;
+      transition: transform .2s, background .2s;
+    }
+
+    .btn:hover:not(:disabled) { transform: translateY(-2px); }
+
+    .primary {
+      color: white;
+      background: var(--purple);
+      border-color: var(--purple);
+    }
+
+    .primary:hover:not(:disabled) {
+      background: var(--navy);
+      border-color: var(--navy);
+    }
+
+    .secondary {
+      color: var(--navy);
+      background: #f0ebfc;
+      border-color: #ded0fb;
+    }
+
+    .secondary:hover:not(:disabled) { background: #e6dcfb; }
+
+    .danger {
+      color: #a12828;
+      background: #fff0f0;
+      border-color: #f1d0d0;
+    }
+
+    .danger:hover:not(:disabled) { background: #ffe1e1; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: 0 18px;
+    }
+
+    .full { grid-column: 1 / -1; }
+
+    .records-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .records-heading h2 { margin: 0; }
+
+    .faculty-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(245px,1fr));
+      gap: 20px;
+    }
+
+    .faculty-card {
+      min-width: 0;
+      overflow: hidden;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 5px 16px rgba(8,11,53,.05);
+      transition: transform .22s, box-shadow .22s;
+    }
+
+    .faculty-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 25px rgba(8,11,53,.1);
+    }
+
+    .faculty-photo, .no-photo {
+      display: block;
+      width: 100%;
+      height: 235px;
+      object-fit: cover;
+      object-position: center;
+      background: #eee9fa;
+      border-bottom: 4px solid var(--gold);
+    }
+
+    .no-photo {
+      display: grid;
+      place-items: center;
+      color: var(--purple);
+      background: #f0ebfc;
+      font-weight: 800;
+    }
+
+    .faculty-info { padding: 19px; }
+
+    .faculty-info h3 {
+      margin: 0 0 5px;
+      color: var(--navy);
+      font-size: 18px;
+      overflow-wrap: anywhere;
+    }
+
+    .position {
+      margin: 0 0 13px;
+      color: var(--purple);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .specialization {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 13px;
+      overflow-wrap: anywhere;
+    }
+
+    .bio {
+      margin: 0 0 15px;
+      color: #62637a;
+      font-size: 13px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 5px 10px;
+      color: var(--navy);
+      background: #fff0c8;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 15px;
+    }
+
+    .card-actions .btn {
+      flex: 1;
+      padding: 9px 10px;
+    }
+
+    .empty {
+      grid-column: 1 / -1;
+      padding: 35px 20px;
+      color: var(--muted);
+      background: #fcfbff;
+      border: 1px dashed #d8d1e9;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .admin-footer {
+      padding: 22px 5%;
+      color: #d8d6f0;
+      background: var(--navy);
+      border-top: 4px solid var(--gold);
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .admin-footer strong { color: var(--gold); }
+
+    @media (max-width: 850px) {
+      .branding-grid { grid-template-columns: 1fr; }
+      .page-heading { align-items: flex-start; }
+      .admin-label { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      .topbar-inner { min-height: 72px; }
+      .brand-logo { width: 44px; height: 44px; font-size: 15px; }
+      .brand-title { font-size: 15px; }
+      .brand-subtitle { font-size: 11px; }
+      .wrap { width: 92%; margin-top: 22px; }
+
+      .page-heading {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 13px;
+      }
+
+      .page-actions {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .page-actions .back {
+        width: 100%;
+        white-space: normal;
+      }
+
+      .panel { padding: 19px; border-radius: 13px; }
+      .branding-card { padding: 17px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .full { grid-column: auto; }
+      .records-heading { align-items: flex-start; flex-direction: column; }
+      .faculty-grid { grid-template-columns: 1fr; }
+      .faculty-photo, .no-photo { height: 260px; }
+      .actions .btn { flex: 1 1 auto; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-logo">CS</div>
+        <div>
+          <h2 class="brand-title">EECP Computer Science</h2>
+          <p class="brand-subtitle">Department Administration</p>
+        </div>
+      </div>
+      <span class="admin-label">ADMIN PANEL</span>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="page-heading">
+      <div>
+        <h1>Faculty Management</h1>
+        <p>Manage faculty profiles, photos, and Faculty-page branding.</p>
+      </div>
+
+      <!-- UPDATED PAGE ACTION BUTTONS -->
+      <div class="page-actions">
+        <a
+          class="back"
+          href="./faculty.html"
+          target="_blank"
+          rel="noopener"
+        >&#128065; View Faculty Page</a>
+
+        <a class="back" href="./admin-dashboard.html">
+          &larr; Back to Dashboard
+        </a>
+      </div>
+    </div>
+
+    <div id="globalStatus" class="status" role="status" aria-live="polite"></div>
+
+    <!-- FACULTY PAGE BRANDING -->
+    <section class="panel">
+      <div class="panel-heading">
+        <div class="section-icon" aria-hidden="true">✦</div>
+        <div>
+          <h2>Faculty Page Branding</h2>
+          <p>Manage the Faculty page logo and banner independently, without changing other pages.</p>
+        </div>
+      </div>
+
+      <div class="branding-grid">
+        <div class="branding-card">
+          <h3 class="subheading">Faculty Logo</h3>
+          <p>Logo used on the Faculty page only.</p>
+
+          <label for="logoFile">Choose logo image</label>
+          <input id="logoFile" type="file" accept="image/jpeg,image/png,image/webp">
+          <small>Accepted formats: JPG, PNG, WebP. Maximum size: 5 MB.</small>
+          <img id="logoPreview" class="preview logo-preview" alt="Faculty logo preview" hidden>
+
+          <div class="actions">
+            <button class="btn primary" id="saveLogo" type="button">Upload / Replace Logo</button>
+            <button class="btn danger" id="removeLogo" type="button">Remove Logo</button>
+          </div>
+        </div>
+
+        <div class="branding-card">
+          <h3 class="subheading">Faculty Banner</h3>
+          <p>Banner used on the Faculty page only.</p>
+
+          <label for="bannerFile">Choose banner image</label>
+          <input id="bannerFile" type="file" accept="image/jpeg,image/png,image/webp">
+          <small>Accepted formats: JPG, PNG, WebP. Maximum size: 5 MB.</small>
+          <img id="bannerPreview" class="preview banner-preview" alt="Faculty banner preview" hidden>
+
+          <div class="actions">
+            <button class="btn primary" id="saveBanner" type="button">Upload / Replace Banner</button>
+            <button class="btn danger" id="removeBanner" type="button">Remove Banner</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn secondary" id="reloadBranding" type="button">Reload Saved Branding</button>
+      </div>
+
+      <div class="hint">
+        <strong>Storage configuration:</strong>
+        Uses the <code>page_branding</code> table with
+        <code>page_key = faculty</code> and the <code>site-branding</code>
+        bucket. Each upload gets a unique filename. Replacing or removing
+        Faculty branding will not delete stored files or change other pages.
+      </div>
+    </section>
+
+    <!-- ADD / EDIT FACULTY -->
+    <section class="panel" id="facultyEditor">
+      <div class="panel-heading">
+        <div class="section-icon" aria-hidden="true">＋</div>
+        <div>
+          <h2 id="formTitle">Add Faculty Member</h2>
+          <p>Create a faculty profile or edit an existing record.</p>
+        </div>
+      </div>
+
+      <form id="facultyForm">
+        <input type="hidden" id="facultyId">
+
+        <div class="form-grid">
+          <div>
+            <label for="facultyName">Full Name *</label>
+            <input id="facultyName" type="text" required maxlength="180" placeholder="Enter full name">
+          </div>
+
+          <div>
+            <label for="facultyPosition">Position *</label>
+            <input id="facultyPosition" type="text" required maxlength="180" placeholder="Instructor, Professor, etc.">
+          </div>
+
+          <div class="full">
+            <label for="facultySpecialization">Specialization</label>
+            <input id="facultySpecialization" type="text" maxlength="250" placeholder="Web Development, Networking, etc.">
+          </div>
+
+          <div class="full">
+            <label for="facultyBio">Biography</label>
+            <textarea id="facultyBio" placeholder="Enter faculty biography"></textarea>
+          </div>
+
+          <div class="full">
+            <label for="facultyPhoto">Faculty Photo</label>
+            <input id="facultyPhoto" type="file" accept="image/jpeg,image/png,image/webp">
+            <small>
+              Accepted formats: JPG, PNG, WebP. Maximum size: 5 MB.
+              When editing, leave this empty to keep the current photo.
+              Replaced and removed photos are retained in Storage.
+            </small>
+            <img id="photoPreview" class="preview" alt="Faculty photo preview" hidden>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="saveFaculty" class="btn primary" type="submit">Save Faculty</button>
+          <button id="clearForm" class="btn secondary" type="button">Clear Form</button>
+        </div>
+
+        <div id="formStatus" class="status" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+
+    <!-- FACULTY RECORDS -->
+    <section class="panel">
+      <div class="records-heading">
+        <div class="panel-heading" style="margin-bottom:0">
+          <div class="section-icon" aria-hidden="true">▤</div>
+          <div>
+            <h2>Faculty Records</h2>
+            <p>Review, update, or remove existing faculty profiles.</p>
+          </div>
+        </div>
+
+        <button id="reloadFaculty" class="btn secondary" type="button">↻ Refresh Records</button>
+      </div>
+
+      <div id="facultyList" class="faculty-grid">
+        <p class="empty">Loading faculty records...</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="admin-footer">
+    <strong>EECP Computer Science Department</strong>
+    <p>Faculty Management Administration</p>
+    <span>&copy; <span id="currentYear"></span> All rights reserved.</span>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./js/config.js"></script>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const client = window.supabaseClient;
+      const $ = id => document.getElementById(id);
+
+      const FACULTY_PHOTO_BUCKET = "faculty-images";
+      const BRANDING_BUCKET = "site-branding";
+      const FACULTY_PAGE_KEY = "faculty";
+      const MAX_FILE_SIZE = 5 * 1024 * 1024;
+      const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
+      let currentUser = null;
+      let currentPhotoUrl = "";
+      let photoObjectUrl = null;
+
+      let logoFile = null;
+      let bannerFile = null;
+      let logoObjectUrl = null;
+      let bannerObjectUrl = null;
+
+      let savedBranding = {
+        logo_url: null,
+        banner_url: null
+      };
+
+      $("currentYear").textContent = new Date().getFullYear();
+
+      function status(el, msg, type = "success") {
+        el.textContent = msg;
+        el.className = "status " + type;
+      }
+
+      function clearStatus(el) {
+        el.textContent = "";
+        el.className = "status";
+      }
+
+      function esc(value = "") {
+        return String(value ?? "").replace(/[&<>"']/g, char => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        })[char]);
+      }
+
+      function uniqueId() {
+  if (
+    typeof crypto !== "undefined" &&
+    typeof crypto.randomUUID === "function"
+  ) {
+    return crypto.randomUUID();
+  }
+
+  if (
+    typeof crypto !== "undefined" &&
+    typeof crypto.getRandomValues === "function"
+  ) {
+    const bytes = new Uint8Array(16);
+    crypto.getRandomValues(bytes);
+
+    bytes[6] = (bytes[6] & 0x0f) | 0x40;
+    bytes[8] = (bytes[8] & 0x3f) | 0x80;
+
+    const hex = Array.from(bytes, byte =>
+      byte.toString(16).padStart(2, "0")
+    ).join("");
+
+    return [
+      hex.slice(0, 8),
+      hex.slice(8, 12),
+      hex.slice(12, 16),
+      hex.slice(16, 20),
+      hex.slice(20)
+    ].join("-");
+  }
+
+  throw new Error(
+    "Secure UUID generation is unavailable. Please use a supported browser and secure connection."
+  );
+}
+
+      function validFile(file, label) {
+        if (!file) {
+          throw Error("Please choose an image first.");
+        }
+
+        if (!ALLOWED_TYPES.includes(file.type)) {
+          throw Error(label + " must be JPG, PNG, or WebP.");
+        }
+
+        if (file.size > MAX_FILE_SIZE) {
+          throw Error(label + " must be 5 MB or smaller.");
+        }
+      }
+
+      function fileExtension(file) {
+        return {
+          "image/jpeg": "jpg",
+          "image/png": "png",
+          "image/webp": "webp"
+        }[file.type];
+      }
+
+      function preview(img, url) {
+        if (url) {
+          img.src = url;
+          img.hidden = false;
+        } else {
+          img.removeAttribute("src");
+          img.hidden = true;
+        }
+      }
+
+      async function requireAdmin() {
+        if (!client) {
+          throw Error("Supabase client missing. Check js/config.js.");
+        }
+
+        const { data, error } = await client.auth.getUser();
+
+        if (error || !data.user) {
+          location.replace("./admin-login.html");
+          return false;
+        }
+
+        currentUser = data.user;
+
+        const { data: admin, error: adminError } = await client
+          .from("admins")
+          .select("user_id")
+          .eq("user_id", currentUser.id)
+          .maybeSingle();
+
+        if (adminError) throw adminError;
+
+        if (!admin) {
+          await client.auth.signOut();
+          location.replace("./admin-login.html");
+          return false;
+        }
+
+        return true;
+      }
+
+      /**
+       * Each faculty photo receives a unique path.
+       * upsert:false prevents overwriting an existing Storage object.
+       */
+      async function uploadFacultyPhoto(file) {
+        validFile(file, "Faculty photo");
+
+        const path =
+          currentUser.id + "/faculty-" + uniqueId() + "." + fileExtension(file);
+
+        const { data, error } = await client.storage
+          .from(FACULTY_PHOTO_BUCKET)
+          .upload(path, file, {
+            upsert: false,
+            contentType: file.type,
+            cacheControl: "3600"
+          });
+
+        if (error) throw error;
+
+        const publicUrl = client.storage
+          .from(FACULTY_PHOTO_BUCKET)
+          .getPublicUrl(data.path).data.publicUrl;
+
+        return { path: data.path, url: publicUrl };
+      }
+
+      /* FACULTY-ONLY WEBSITE BRANDING */
+
+      async function loadBranding() {
+        const { data, error } = await client
+          .from("page_branding")
+          .select("page_key,logo_url,banner_url")
+          .eq("page_key", FACULTY_PAGE_KEY)
+          .maybeSingle();
+
+        if (error) throw error;
+
+        savedBranding = data || {
+          logo_url: null,
+          banner_url: null
+        };
+
+        preview($("logoPreview"), logoObjectUrl || savedBranding.logo_url);
+        preview($("bannerPreview"), bannerObjectUrl || savedBranding.banner_url);
+      }
+
+      async function ensureFacultyBrandingRow() {
+        const { data: existing, error: lookupError } = await client
+          .from("page_branding")
+          .select("page_key,logo_url,banner_url")
+          .eq("page_key", FACULTY_PAGE_KEY)
+          .maybeSingle();
+
+        if (lookupError) throw lookupError;
+
+        if (existing) {
+          savedBranding = existing;
+          return existing;
+        }
+
+        const { data, error } = await client
+          .from("page_branding")
+          .insert({ page_key: FACULTY_PAGE_KEY })
+          .select("page_key,logo_url,banner_url")
+          .single();
+
+        if (error) throw error;
+
+        savedBranding = data;
+        return data;
+      }
+
+      async function saveFacultyBrandingField(field, value) {
+        if (!["logo_url", "banner_url"].includes(field)) {
+          throw Error("Invalid branding field.");
+        }
+
+        await ensureFacultyBrandingRow();
+
+        /* Update only the selected column of the Faculty row.
+           Do not delete any previous Storage file. */
+        const { data, error } = await client
+          .from("page_branding")
+          .update({ [field]: value })
+          .eq("page_key", FACULTY_PAGE_KEY)
+          .select("page_key,logo_url,banner_url")
+          .single();
+
+        if (error) throw error;
+
+        savedBranding = data;
+        return data;
+      }
+
+      async function uploadFacultyBranding(file, kind) {
+        validFile(file, kind);
+
+        const objectPath =
+          "faculty/" + kind + "-" + uniqueId() + "." + fileExtension(file);
+
+        const { data, error } = await client.storage
+          .from(BRANDING_BUCKET)
+          .upload(objectPath, file, {
+            upsert: false,
+            contentType: file.type,
+            cacheControl: "3600"
+          });
+
+        if (error) throw error;
+
+        const publicUrl = client.storage
+          .from(BRANDING_BUCKET)
+          .getPublicUrl(data.path).data.publicUrl;
+
+        return { path: data.path, url: publicUrl };
+      }
+
+      async function saveBrand(kind) {
+        const isLogo = kind === "logo";
+        const field = isLogo ? "logo_url" : "banner_url";
+        const file = isLogo ? logoFile : bannerFile;
+        const button = $(isLogo ? "saveLogo" : "saveBanner");
+
+        if (!file) {
+          status($("globalStatus"), "Choose a " + kind + " image first.", "error");
+          return;
+        }
+
+        button.disabled = true;
+
+        try {
+          const uploaded = await uploadFacultyBranding(file, kind);
+
+          await saveFacultyBrandingField(field, uploaded.url);
+
+          if (isLogo) {
+            logoFile = null;
+            $("logoFile").value = "";
+
+            if (logoObjectUrl) URL.revokeObjectURL(logoObjectUrl);
+            logoObjectUrl = null;
+
+            preview($("logoPreview"), uploaded.url);
+          } else {
+            bannerFile = null;
+            $("bannerFile").value = "";
+
+            if (bannerObjectUrl) URL.revokeObjectURL(bannerObjectUrl);
+            bannerObjectUrl = null;
+
+            preview($("bannerPreview"), uploaded.url);
+          }
+
+          status(
+            $("globalStatus"),
+            "Faculty " + kind +
+              " saved. Other pages and previous Storage files were not changed."
+          );
+        } catch (error) {
+          console.error("Faculty branding upload failed:", error);
+
+          status(
+            $("globalStatus"),
+            "Could not save Faculty " + kind + ": " + error.message,
+            "error"
+          );
+        } finally {
+          button.disabled = false;
+        }
+      }
+
+      async function removeBrand(kind) {
+        const isLogo = kind === "logo";
+        const field = isLogo ? "logo_url" : "banner_url";
+        const button = $(isLogo ? "removeLogo" : "removeBanner");
+
+        if (!savedBranding[field]) {
+          status(
+            $("globalStatus"),
+            "No saved Faculty " + kind + " to remove.",
+            "error"
+          );
+          return;
+        }
+
+        if (!confirm(
+          "Remove the Faculty page " + kind +
+          "? Other pages will not be affected. The Storage file will be retained."
+        )) {
+          return;
+        }
+
+        button.disabled = true;
+
+        try {
+          /* Clear only the Faculty page URL; keep the actual Storage file. */
+          await saveFacultyBrandingField(field, null);
+
+          if (isLogo) {
+            logoFile = null;
+            $("logoFile").value = "";
+
+            if (logoObjectUrl) URL.revokeObjectURL(logoObjectUrl);
+            logoObjectUrl = null;
+
+            preview($("logoPreview"), null);
+          } else {
+            bannerFile = null;
+            $("bannerFile").value = "";
+
+            if (bannerObjectUrl) URL.revokeObjectURL(bannerObjectUrl);
+            bannerObjectUrl = null;
+
+            preview($("bannerPreview"), null);
+          }
+
+          status(
+            $("globalStatus"),
+            "Faculty " + kind +
+              " removed from the page. Storage files and other pages were left unchanged."
+          );
+        } catch (error) {
+          console.error("Faculty branding removal failed:", error);
+
+          status(
+            $("globalStatus"),
+            "Could not remove Faculty " + kind + ": " + error.message,
+            "error"
+          );
+        } finally {
+          button.disabled = false;
+        }
+      }
+
+      $("logoFile").addEventListener("change", event => {
+        logoFile = event.target.files?.[0] || null;
+
+        if (logoObjectUrl) URL.revokeObjectURL(logoObjectUrl);
+        logoObjectUrl = null;
+
+        if (logoFile) {
+          try {
+            validFile(logoFile, "Logo");
+            logoObjectUrl = URL.createObjectURL(logoFile);
+            preview($("logoPreview"), logoObjectUrl);
+            clearStatus($("globalStatus"));
+          } catch (error) {
+            logoFile = null;
+            event.target.value = "";
+            preview($("logoPreview"), savedBranding.logo_url);
+            status($("globalStatus"), error.message, "error");
+          }
+        } else {
+          preview($("logoPreview"), savedBranding.logo_url);
+        }
+      });
+
+      $("bannerFile").addEventListener("change", event => {
+        bannerFile = event.target.files?.[0] || null;
+
+        if (bannerObjectUrl) URL.revokeObjectURL(bannerObjectUrl);
+        bannerObjectUrl = null;
+
+        if (bannerFile) {
+          try {
+            validFile(bannerFile, "Banner");
+            bannerObjectUrl = URL.createObjectURL(bannerFile);
+            preview($("bannerPreview"), bannerObjectUrl);
+            clearStatus($("globalStatus"));
+          } catch (error) {
+            bannerFile = null;
+            event.target.value = "";
+            preview($("bannerPreview"), savedBranding.banner_url);
+            status($("globalStatus"), error.message, "error");
+          }
+        } else {
+          preview($("bannerPreview"), savedBranding.banner_url);
+        }
+      });
+
+      $("saveLogo").addEventListener("click", () => saveBrand("logo"));
+      $("saveBanner").addEventListener("click", () => saveBrand("banner"));
+      $("removeLogo").addEventListener("click", () => removeBrand("logo"));
+      $("removeBanner").addEventListener("click", () => removeBrand("banner"));
+
+      $("reloadBranding").addEventListener("click", async () => {
+        const button = $("reloadBranding");
+        button.disabled = true;
+
+        try {
+          await loadBranding();
+          status($("globalStatus"), "Faculty branding reloaded.");
+        } catch (error) {
+          status($("globalStatus"), error.message, "error");
+        } finally {
+          button.disabled = false;
+        }
+      });
+
+      /* FACULTY FORM */
+
+      function resetForm() {
+        $("facultyForm").reset();
+        $("facultyId").value = "";
+        $("formTitle").textContent = "Add Faculty Member";
+        $("saveFaculty").textContent = "Save Faculty";
+        currentPhotoUrl = "";
+        preview($("photoPreview"), null);
+
+        if (photoObjectUrl) URL.revokeObjectURL(photoObjectUrl);
+        photoObjectUrl = null;
+
+        clearStatus($("formStatus"));
+      }
+
+      $("facultyPhoto").addEventListener("change", event => {
+        const file = event.target.files?.[0];
+
+        if (photoObjectUrl) URL.revokeObjectURL(photoObjectUrl);
+        photoObjectUrl = null;
+
+        if (!file) {
+          preview($("photoPreview"), currentPhotoUrl);
+          return;
+        }
+
+        try {
+          validFile(file, "Faculty photo");
+          photoObjectUrl = URL.createObjectURL(file);
+          preview($("photoPreview"), photoObjectUrl);
+          clearStatus($("formStatus"));
+        } catch (error) {
+          event.target.value = "";
+          preview($("photoPreview"), currentPhotoUrl);
+          status($("formStatus"), error.message, "error");
+        }
+      });
+
+      /* LOAD FACULTY RECORDS */
+
+      async function loadFaculty() {
+        $("facultyList").innerHTML =
+          '<p class="empty">Loading faculty records...</p>';
+
+        const { data, error } = await client
+          .from("faculty")
+          .select("*")
+          .order("name", { ascending: true });
+
+        if (error) throw error;
+
+        if (!data?.length) {
+          $("facultyList").innerHTML =
+            '<p class="empty">No faculty records yet. Add the first faculty member using the form above.</p>';
+          return;
+        }
+
+        $("facultyList").innerHTML = data.map(person => `
+          <article class="faculty-card">
+            ${
+              person.photo_url
+                ? `<img class="faculty-photo" src="${esc(person.photo_url)}" alt="Faculty photo of ${esc(person.name)}">`
+                : '<div class="no-photo">No Photo Available</div>'
+            }
+
+            <div class="faculty-info">
+              <h3>${esc(person.name)}</h3>
+              <p class="position">${esc(person.position)}</p>
+
+              <p class="specialization">
+                <strong>Specialization:</strong>
+                ${esc(person.specialization || "Not specified")}
+              </p>
+
+              <p class="bio">${esc(person.bio || "No biography provided.")}</p>
+              <span class="pill">Faculty Profile</span>
+
+              <div class="card-actions">
+                <button class="btn primary" data-edit="${esc(person.id)}" type="button">
+                  Edit
+                </button>
+
+                <button class="btn danger" data-delete="${esc(person.id)}" type="button">
+                  Delete
+                </button>
+              </div>
+            </div>
+          </article>
+        `).join("");
+      }
+
+      $("facultyForm").addEventListener("submit", async event => {
+        event.preventDefault();
+
+        const button = $("saveFaculty");
+        button.disabled = true;
+        button.textContent = "Saving...";
+
+        try {
+          const id = $("facultyId").value;
+
+          const payload = {
+            name: $("facultyName").value.trim(),
+            position: $("facultyPosition").value.trim(),
+            specialization: $("facultySpecialization").value.trim() || null,
+            bio: $("facultyBio").value.trim() || null,
+            photo_url: currentPhotoUrl || null
+          };
+
+          if (!payload.name || !payload.position) {
+            throw Error("Full name and position are required.");
+          }
+
+          const file = $("facultyPhoto").files?.[0];
+
+          if (file) {
+            const uploaded = await uploadFacultyPhoto(file);
+            payload.photo_url = uploaded.url;
+          }
+
+          let result;
+
+          if (id) {
+            result = await client
+              .from("faculty")
+              .update(payload)
+              .eq("id", id)
+              .select()
+              .single();
+          } else {
+            result = await client
+              .from("faculty")
+              .insert(payload)
+              .select()
+              .single();
+          }
+
+          if (result.error) throw result.error;
+
+          const successMessage = id
+            ? "Faculty profile updated successfully."
+            : "Faculty profile added successfully.";
+
+          resetForm();
+          status($("formStatus"), successMessage);
+
+          await loadFaculty();
+
+          status(
+            $("globalStatus"),
+            successMessage + " Existing and other faculty photo files were retained."
+          );
+        } catch (error) {
+          console.error("Could not save faculty:", error);
+
+          status(
+            $("formStatus"),
+            "Could not save faculty: " + error.message,
+            "error"
+          );
+        } finally {
+          button.disabled = false;
+          button.textContent = $("facultyId").value
+            ? "Update Faculty"
+            : "Save Faculty";
+        }
+      });
+
+      $("clearForm").addEventListener("click", resetForm);
+
+      $("reloadFaculty").addEventListener("click", async () => {
+        const button = $("reloadFaculty");
+        button.disabled = true;
+        button.textContent = "Loading...";
+
+        try {
+          await loadFaculty();
+          status($("globalStatus"), "Faculty records refreshed.");
+        } catch (error) {
+          status(
+            $("globalStatus"),
+            "Could not refresh faculty: " + error.message,
+            "error"
+          );
+        } finally {
+          button.disabled = false;
+          button.textContent = "↻ Refresh Records";
+        }
+      });
+
+      /* EDIT / DELETE */
+
+      $("facultyList").addEventListener("click", async event => {
+        const edit = event.target.closest("[data-edit]");
+        const del = event.target.closest("[data-delete]");
+
+        try {
+          if (edit) {
+            const { data, error } = await client
+              .from("faculty")
+              .select("*")
+              .eq("id", edit.dataset.edit)
+              .single();
+
+            if (error) throw error;
+
+            $("facultyId").value = data.id;
+            $("facultyName").value = data.name || "";
+            $("facultyPosition").value = data.position || "";
+            $("facultySpecialization").value = data.specialization || "";
+            $("facultyBio").value = data.bio || "";
+
+            currentPhotoUrl = data.photo_url || "";
+            $("facultyPhoto").value = "";
+            preview($("photoPreview"), currentPhotoUrl);
+
+            $("formTitle").textContent = "Edit Faculty Member";
+            $("saveFaculty").textContent = "Update Faculty";
+
+            status($("formStatus"), "Editing: " + data.name);
+
+            $("facultyEditor").scrollIntoView({
+              behavior: "smooth",
+              block: "start"
+            });
+          } else if (del) {
+            if (!confirm(
+              "Delete this faculty profile? The database record will be deleted, but its photo file will remain in Storage."
+            )) {
+              return;
+            }
+
+            const { error } = await client
+              .from("faculty")
+              .delete()
+              .eq("id", del.dataset.delete);
+
+            if (error) throw error;
+
+            status(
+              $("globalStatus"),
+              "Faculty profile deleted. Its photo file was retained in Storage."
+            );
+
+            await loadFaculty();
+          }
+        } catch (error) {
+          console.error("Faculty action failed:", error);
+
+          status(
+            $("globalStatus"),
+            "Action failed: " + error.message,
+            "error"
+          );
+        }
+      });
+
+      /* INITIALIZE */
+
+      async function init() {
+        try {
+          if (!await requireAdmin()) return;
+
+          await Promise.all([
+            loadBranding(),
+            loadFaculty()
+          ]);
+        } catch (error) {
+          console.error(error);
+
+          status(
+            $("globalStatus"),
+            "Setup error: " + error.message,
+            "error"
+          );
+
+          $("facultyList").innerHTML =
+            '<p class="empty">Could not load faculty records. Check your Supabase connection, database permissions, and Storage policies.</p>';
+        }
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>

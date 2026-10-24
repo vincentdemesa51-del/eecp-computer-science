@@ -1,0 +1,1055 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EECP Computer Science Department</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4B19A8;
+            --secondary: #6735C6;
+            --navy: #080B35;
+            --gold: #FFBF3C;
+            --light: #F6F4FF;
+            --text: #34345F;
+            --muted: #68708D;
+            --white: #FFFFFF;
+            --border: #DED8F5;
+            --editor: #090D32;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 90px;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--light);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* NAVIGATION */
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            padding: 16px 5%;
+            background: var(--navy);
+            border-bottom: 5px solid var(--gold);
+            box-shadow: 0 4px 18px rgba(8, 11, 53, .15);
+        }
+
+        .logo {
+            color: var(--white);
+            font-size: 21px;
+            font-weight: 800;
+            letter-spacing: .3px;
+        }
+
+        .logo span {
+            color: var(--gold);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            color: #F0EEFF;
+            font-size: 14px;
+            font-weight: 600;
+            transition: color .3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .nav-links .nav-button {
+            padding: 10px 19px;
+            color: var(--navy);
+            background: var(--gold);
+            border-radius: 30px;
+            font-weight: 800;
+        }
+
+        .nav-links .nav-button:hover {
+            color: var(--navy);
+            background: white;
+        }
+
+        /* HERO */
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr .9fr;
+            align-items: center;
+            gap: 40px;
+            min-height: 650px;
+            padding: 70px 7%;
+            background:
+                radial-gradient(
+                    circle at 80% 40%,
+                    rgba(103, 53, 198, .16),
+                    transparent 38%
+                ),
+                linear-gradient(135deg, #F6F4FF, #ECE6FF);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-label {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 8px 15px;
+            color: var(--purple);
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .hero h1 {
+            max-width: 650px;
+            margin-bottom: 22px;
+            color: var(--navy);
+            font-size: clamp(36px, 5vw, 58px);
+            line-height: 1.13;
+            letter-spacing: -1.5px;
+        }
+
+        .hero h1 span {
+            color: var(--purple);
+        }
+
+        .hero-description {
+            max-width: 570px;
+            margin-bottom: 30px;
+            color: #5D6481;
+            font-size: 17px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 13px 23px;
+            border: 2px solid var(--purple);
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            transition: all .3s ease;
+        }
+
+        .btn-primary {
+            color: white;
+            background: var(--purple);
+        }
+
+        .btn-primary:hover {
+            background: var(--navy);
+            border-color: var(--navy);
+            transform: translateY(-3px);
+        }
+
+        .btn-outline {
+            color: var(--purple);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            color: var(--navy);
+            background: var(--gold);
+            border-color: var(--gold);
+            transform: translateY(-3px);
+        }
+
+        /* CODE EDITOR */
+
+        .hero-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 0;
+            padding: 24px;
+            perspective: 1000px;
+        }
+
+        .code-editor {
+            position: relative;
+            width: 100%;
+            max-width: 510px;
+            padding: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 191, 60, .65);
+            border-radius: 30px;
+            background: linear-gradient(145deg, #6735C6, #21105F);
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,.15),
+                0 0 24px rgba(75,25,168,.22),
+                0 25px 55px rgba(8,11,53,.23),
+                inset 0 0 22px rgba(255,255,255,.08);
+            transition: transform .4s ease, box-shadow .4s ease;
+            animation: editorAppear .9s ease both;
+        }
+
+        .code-editor:hover {
+            transform: translateY(-7px);
+            box-shadow:
+                0 0 35px rgba(103,53,198,.28),
+                0 30px 65px rgba(8,11,53,.3);
+        }
+
+        .editor-window {
+            overflow: hidden;
+            border: 1px solid rgba(255,191,60,.25);
+            border-radius: 23px;
+            background: var(--editor);
+        }
+
+        .editor-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-height: 65px;
+            padding: 15px 18px;
+            background: linear-gradient(135deg, #171747, #0C1039);
+            border-bottom: 1px solid rgba(255,191,60,.2);
+        }
+
+        .window-dot {
+            width: 13px;
+            height: 13px;
+            flex-shrink: 0;
+            border-radius: 50%;
+        }
+
+        .dot-red {
+            background: #FF656C;
+            box-shadow: 0 0 8px rgba(255,101,108,.35);
+        }
+
+        .dot-yellow {
+            background: var(--gold);
+            box-shadow: 0 0 8px rgba(255,191,60,.35);
+        }
+
+        .dot-green {
+            background: #48E6A1;
+            box-shadow: 0 0 8px rgba(72,230,161,.35);
+        }
+
+        .editor-title {
+            flex: 1;
+            overflow: hidden;
+            margin-left: 8px;
+            color: #F1ECFF;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 13px;
+            text-align: center;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .editor-body {
+            padding: 24px 16px 30px;
+            background:
+                radial-gradient(circle at top right, rgba(75,25,168,.12), transparent 40%),
+                var(--editor);
+        }
+
+        .code-line {
+            display: grid;
+            grid-template-columns: 25px minmax(0, 1fr);
+            gap: 12px;
+            align-items: start;
+            margin-bottom: 12px;
+            font-family: Consolas, Monaco, "Courier New", monospace;
+            font-size: clamp(10px, 1.15vw, 14px);
+            line-height: 1.8;
+        }
+
+        .line-number {
+            color: #7777AD;
+            text-align: right;
+            user-select: none;
+        }
+
+        .code-text {
+            min-width: 0;
+            color: #E6E2FF;
+            overflow-wrap: anywhere;
+        }
+
+        .indent { padding-left: 18px; }
+        .indent-more { padding-left: 36px; }
+
+        .syntax-purple { color: #C17AFF; }
+        .syntax-blue { color: #8FA8FF; }
+        .syntax-green { color: #62E6B0; }
+        .syntax-orange { color: #FF986E; }
+        .syntax-yellow { color: var(--gold); }
+        .syntax-white { color: #F1ECFF; }
+
+        .code-spacer { height: 14px; }
+
+        @keyframes editorAppear {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* QUICK ACCESS */
+
+        .quick-access {
+            padding: 70px 7%;
+            background: white;
+        }
+
+        .section-heading {
+            margin-bottom: 12px;
+            color: var(--navy);
+            font-size: clamp(27px, 3.5vw, 38px);
+            text-align: center;
+        }
+
+        .section-description {
+            max-width: 650px;
+            margin: 0 auto 40px;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 24px;
+        }
+
+        .quick-card {
+            padding: 28px 25px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            box-shadow: 0 8px 24px rgba(8,11,53,.05);
+            transition: transform .3s ease, box-shadow .3s ease;
+        }
+
+        .quick-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 32px rgba(75,25,168,.12);
+            border-color: var(--purple);
+        }
+
+        .card-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 52px;
+            height: 52px;
+            margin-bottom: 18px;
+            color: var(--navy);
+            background: #FFF0C9;
+            border: 1px solid #F6DF9F;
+            border-radius: 14px;
+            font-size: 25px;
+        }
+
+        .quick-card h3 {
+            margin-bottom: 10px;
+            color: var(--navy);
+            font-size: 19px;
+        }
+
+        .quick-card p {
+            margin-bottom: 18px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .text-link {
+            color: var(--purple);
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .text-link:hover { color: var(--navy); }
+
+        /* ABOUT PREVIEW */
+
+        .about-preview {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 50px;
+            padding: 85px 7%;
+            background: #EEE9FF;
+        }
+
+        .about-preview h2 {
+            margin-bottom: 18px;
+            color: var(--navy);
+            font-size: clamp(28px, 3.5vw, 39px);
+            line-height: 1.2;
+        }
+
+        .about-preview p {
+            margin-bottom: 16px;
+            color: #5D6481;
+        }
+
+        .about-panel {
+            padding: 35px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            box-shadow: 0 14px 35px rgba(8,11,53,.08);
+        }
+
+        .about-panel h3 {
+            margin-bottom: 18px;
+            color: var(--purple);
+        }
+
+        .about-list { list-style: none; }
+
+        .about-list li {
+            margin: 12px 0;
+            padding-left: 28px;
+            color: #555B7C;
+            position: relative;
+        }
+
+        .about-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--purple);
+            font-weight: bold;
+        }
+
+        /* LATEST UPDATES */
+
+        .latest-updates {
+            padding: 80px 7%;
+            background: white;
+        }
+
+        .updates-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 24px;
+        }
+
+        .update-card {
+            padding: 25px;
+            background: #FCFBFF;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            transition: all .3s ease;
+        }
+
+        .update-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--purple);
+            box-shadow: 0 12px 28px rgba(75,25,168,.1);
+        }
+
+        .update-tag {
+            display: inline-block;
+            margin-bottom: 15px;
+            padding: 5px 10px;
+            color: var(--navy);
+            background: #FFF0C9;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .update-card h3 {
+            margin-bottom: 10px;
+            color: var(--navy);
+            font-size: 18px;
+        }
+
+        .update-card p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        /* CONTACT BANNER */
+
+        .contact-banner {
+            margin: 35px 7% 75px;
+            padding: 48px 35px;
+            color: white;
+            text-align: center;
+            background: linear-gradient(135deg, var(--navy), var(--purple));
+            border: 2px solid rgba(255,191,60,.65);
+            border-radius: 22px;
+            box-shadow: 0 15px 35px rgba(8,11,53,.2);
+        }
+
+        .contact-banner h2 {
+            margin-bottom: 12px;
+            font-size: clamp(25px, 3vw, 36px);
+        }
+
+        .contact-banner p {
+            max-width: 620px;
+            margin: 0 auto 24px;
+            color: #E7E2FF;
+        }
+
+        .contact-banner .btn {
+            color: var(--navy);
+            background: var(--gold);
+            border-color: var(--gold);
+        }
+
+        .contact-banner .btn:hover {
+            color: var(--navy);
+            background: white;
+            border-color: white;
+        }
+
+        /* FOOTER */
+
+        .footer {
+            padding: 30px 7%;
+            color: #E1DEF6;
+            background: var(--navy);
+            border-top: 5px solid var(--gold);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .footer strong { color: white; }
+        .footer p { font-size: 13px; }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+        }
+
+        .footer-links a {
+            font-size: 13px;
+            transition: color .3s ease;
+        }
+
+        .footer-links a:hover { color: var(--gold); }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1000px) {
+            .hero {
+                grid-template-columns: 1fr .85fr;
+                gap: 15px;
+                padding: 60px 5%;
+            }
+
+            .hero-visual { padding: 10px; }
+
+            .code-editor {
+                padding: 10px;
+                border-radius: 27px;
+            }
+
+            .editor-window { border-radius: 19px; }
+
+            .editor-header {
+                gap: 7px;
+                padding: 12px;
+            }
+
+            .window-dot {
+                width: 10px;
+                height: 10px;
+            }
+
+            .editor-body { padding: 18px 10px 24px; }
+
+            .code-line {
+                gap: 7px;
+                grid-template-columns: 20px minmax(0,1fr);
+                font-size: 11px;
+            }
+
+            .quick-access,
+            .latest-updates {
+                padding-left: 5%;
+                padding-right: 5%;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .navbar {
+                flex-direction: column;
+                padding: 16px 5%;
+            }
+
+            .nav-links {
+                justify-content: center;
+                gap: 13px 18px;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 55px 6%;
+            }
+
+            .hero-content { text-align: center; }
+
+            .hero-description {
+                margin-right: auto;
+                margin-left: auto;
+            }
+
+            .hero-buttons { justify-content: center; }
+
+            .hero-visual {
+                width: 100%;
+                max-width: 430px;
+                margin: 0 auto;
+                padding: 10px;
+            }
+
+            .code-editor { max-width: 100%; }
+
+            .code-line {
+                font-size: clamp(11px, 2.7vw, 14px);
+                grid-template-columns: 25px minmax(0,1fr);
+                gap: 10px;
+            }
+
+            .quick-grid,
+            .updates-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-preview {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                padding: 60px 6%;
+            }
+
+            .quick-access,
+            .latest-updates {
+                padding: 60px 6%;
+            }
+
+            .contact-banner {
+                margin: 20px 5% 55px;
+                padding: 35px 22px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links { justify-content: center; }
+        }
+
+        @media (max-width: 380px) {
+            .hero h1 { font-size: 34px; }
+
+            .editor-header { padding: 10px; }
+            .editor-title { font-size: 11px; }
+            .editor-body { padding: 16px 8px 20px; }
+
+            .code-line {
+                font-size: 10px;
+                gap: 5px;
+            }
+
+            .indent { padding-left: 10px; }
+            .indent-more { padding-left: 20px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVIGATION BAR -->
+
+    <header class="navbar">
+        <a href="index.html" class="logo">
+            EECP <span>CS Department</span>
+        </a>
+
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="faculty.html">Faculty</a>
+            <a href="events.html">Events</a>
+            <a href="contact.html">Contact</a>
+            <a href="admin-login.html" class="nav-button">Admin</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <!-- HERO SECTION -->
+
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <span class="hero-label">WELCOME TO OUR DEPARTMENT</span>
+
+                <h1>
+                    Explore the World of
+                    <span>Computer Science</span>
+                </h1>
+
+                <p class="hero-description">
+                    Welcome to the EECP Computer Science Department.
+                    Discover technology, develop your programming skills,
+                    explore new ideas, and build a future through innovation
+                    and digital learning.
+                </p>
+
+                <div class="hero-buttons">
+                    <a href="about.html" class="btn btn-primary">
+                        Discover Our Department
+                    </a>
+
+                    <a href="events.html" class="btn btn-outline">
+                        Explore Events
+                    </a>
+                </div>
+            </div>
+
+            <!-- CODE EDITOR DESIGN -->
+
+            <div class="hero-visual">
+                <div class="code-editor">
+                    <div class="editor-window">
+                        <div class="editor-header">
+                            <span class="window-dot dot-red"></span>
+                            <span class="window-dot dot-yellow"></span>
+                            <span class="window-dot dot-green"></span>
+
+                            <div class="editor-title">computer-science.js</div>
+                        </div>
+
+                        <div class="editor-body">
+                            <div class="code-line">
+                                <span class="line-number">1</span>
+                                <span class="code-text">
+                                    <span class="syntax-purple">const</span>
+                                    <span class="syntax-blue"> department</span>
+                                    <span class="syntax-yellow"> = {</span>
+                                </span>
+                            </div>
+
+                            <div class="code-line">
+                                <span class="line-number">2</span>
+                                <span class="code-text indent">
+                                    <span class="syntax-blue">name:</span>
+                                    <span class="syntax-green"> "EECP CS"</span><span class="syntax-yellow">,</span>
+                                </span>
+                            </div>
+
+                            <div class="code-line">
+                                <span class="line-number">3</span>
+                                <span class="code-text indent">
+                                    <span class="syntax-blue">learn:</span>
+                                    <span class="syntax-orange"> true</span><span class="syntax-yellow">,</span>
+                                </span>
+                            </div>
+
+                            <div class="code-line">
+                                <span class="line-number">4</span>
+                                <span class="code-text indent">
+                                    <span class="syntax-blue">build:</span>
+                                    <span class="syntax-orange"> true</span><span class="syntax-yellow">,</span>
+                                </span>
+                            </div>
+
+                            <div class="code-line">
+                                <span class="line-number">5</span>
+                                <span class="code-text indent">
+                                    <span class="syntax-blue">innovate:</span>
+                                    <span class="syntax-orange"> true</span>
+                                </span>
+                            </div>
+
+                            <div class="code-line">
+                                <span class="line-number">6</span>
+                                <span class="code-text">
+                                    <span class="syntax-yellow">};</span>
+                                </span>
+                            </div>
+
+                            <div class="code-spacer"></div>
+
+                            <div class="code-line">
+                                <span class="line-number">7</span>
+                                <span class="code-text"></span>
+                            </div>
+
+                            <div class="code-line">
+                                <span class="line-number">8</span>
+                                <span class="code-text">
+                                    <span class="syntax-purple">function</span>
+                                    <span class="syntax-blue"> createFuture</span><span class="syntax-yellow">() {</span>
+                                </span>
+                            </div>
+
+                            <div class="code-line">
+                                <span class="line-number">9</span>
+                                <span class="code-text indent">
+                                    <span class="syntax-purple">return</span>
+                                    <span class="syntax-green"> "Innovation"</span><span class="syntax-yellow">;</span>
+                                </span>
+                            </div>
+
+                            <div class="code-line">
+                                <span class="line-number">10</span>
+                                <span class="code-text">
+                                    <span class="syntax-yellow">}</span>
+                                </span>
+                            </div>
+
+                            <div class="code-spacer"></div>
+
+                            <div class="code-line">
+                                <span class="line-number">11</span>
+                                <span class="code-text"></span>
+                            </div>
+
+                            <div class="code-line">
+                                <span class="line-number">12</span>
+                                <span class="code-text"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- QUICK ACCESS -->
+
+        <section class="quick-access" id="quick-access">
+            <h2 class="section-heading">Explore Our Department</h2>
+
+            <p class="section-description">
+                Learn more about our department, meet our faculty,
+                and discover activities that support learning and innovation.
+            </p>
+
+            <div class="quick-grid">
+                <article class="quick-card">
+                    <div class="card-icon">⌘</div>
+                    <h3>About Us</h3>
+                    <p>
+                        Discover our department's background, goals,
+                        and commitment to computer science education.
+                    </p>
+                    <a href="about.html" class="text-link">Learn More →</a>
+                </article>
+
+                <article class="quick-card">
+                    <div class="card-icon">👨‍🏫</div>
+                    <h3>Our Faculty</h3>
+                    <p>
+                        Get to know the faculty members who guide and
+                        support students in their academic journey.
+                    </p>
+                    <a href="faculty.html" class="text-link">Meet the Faculty →</a>
+                </article>
+
+                <article class="quick-card">
+                    <div class="card-icon">📅</div>
+                    <h3>Events and Activities</h3>
+                    <p>
+                        Explore department events, student activities,
+                        announcements, and learning opportunities.
+                    </p>
+                    <a href="events.html" class="text-link">View Events →</a>
+                </article>
+            </div>
+        </section>
+
+        <!-- ABOUT PREVIEW -->
+
+        <section class="about-preview" id="about-preview">
+            <div>
+                <h2>
+                    Learning Today.
+                    <br>
+                    Innovating Tomorrow.
+                </h2>
+
+                <p>
+                    Computer Science encourages students to think
+                    critically, solve problems, and understand how
+                    technology can improve people's lives.
+                </p>
+
+                <p>
+                    Our department promotes continuous learning,
+                    creativity, collaboration, and responsible
+                    use of technology.
+                </p>
+
+                <a href="about.html" class="btn btn-primary">
+                    Read More About Us
+                </a>
+            </div>
+
+            <div class="about-panel">
+                <h3>Our Department Values</h3>
+                <ul class="about-list">
+                    <li>Continuous learning and improvement</li>
+                    <li>Creative and critical thinking</li>
+                    <li>Problem-solving through technology</li>
+                    <li>Collaboration and teamwork</li>
+                    <li>Responsible digital innovation</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LATEST UPDATES -->
+
+        <section class="latest-updates" id="latestNews">
+            <h2 class="section-heading">Latest Updates</h2>
+
+            <p class="section-description">
+                Stay informed about department announcements,
+                events, and learning opportunities.
+            </p>
+
+            <div class="updates-grid">
+                <article class="update-card">
+                    <span class="update-tag">Announcement</span>
+                    <h3>Department Announcements</h3>
+                    <p>
+                        Important announcements and updates from
+                        the Computer Science Department will appear here.
+                    </p>
+                </article>
+
+                <article class="update-card">
+                    <span class="update-tag">Activities</span>
+                    <h3>Upcoming Activities</h3>
+                    <p>
+                        Visit our Events page to learn about upcoming
+                        academic activities and department programs.
+                    </p>
+                    <a href="events.html" class="text-link">View Activities →</a>
+                </article>
+
+                <article class="update-card">
+                    <span class="update-tag">Information</span>
+                    <h3>Student Resources</h3>
+                    <p>
+                        Explore department information and connect
+                        with faculty members for academic guidance.
+                    </p>
+                    <a href="faculty.html" class="text-link">View Faculty →</a>
+                </article>
+            </div>
+        </section>
+
+        <!-- CONTACT BANNER -->
+
+        <section class="contact-banner" id="contact-banner">
+            <h2>Have Questions?</h2>
+            <p>
+                Need more information about the department?
+                Visit our Contact page to find out how to reach us.
+            </p>
+
+            <a href="contact.html" class="btn">
+                Contact Our Department
+            </a>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>
+                © <span id="currentYear"></span>
+                <strong>EECP Computer Science Department</strong>.
+                All rights reserved.
+            </p>
+
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="faculty.html">Faculty</a>
+                <a href="events.html">Events</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById("currentYear").textContent =
+            new Date().getFullYear();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080B35">
+  <title>Faculty &amp; Staff | EECP Computer Science Department</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/eecp-theme.css">
+
+  <style>
+    :root {
+      --navy: #080B35;
+      --purple: #4B19A8;
+      --gold: #FFBF3C;
+      --light-bg: #F6F2FF;
+      --light-purple: #EEE7FF;
+      --border: #DDD2FF;
+      --text: #211B3D;
+      --muted: #706785;
+      --white: #FFFFFF;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body.faculty-page {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--light-bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    /* NAVIGATION */
+    .faculty-page .navbar {
+      position: relative;
+      z-index: 100;
+      background: var(--navy);
+      border-bottom: 3px solid var(--gold);
+    }
+
+    .faculty-page .nav-container {
+      width: 90%;
+      max-width: 1250px;
+      min-height: 85px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .faculty-page .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+      color: white;
+    }
+
+    .faculty-page .logo-img {
+      width: 54px;
+      height: 54px;
+      object-fit: contain;
+      border: 2px solid var(--gold);
+      border-radius: 12px;
+      background: white;
+    }
+
+    .faculty-page .brand-text strong {
+      display: block;
+      color: white;
+      font-size: 20px;
+    }
+
+    .faculty-page .brand-text span {
+      display: block;
+      color: #E8DEFF;
+      font-size: 10px;
+      line-height: 1.5;
+      letter-spacing: 1px;
+    }
+
+    .faculty-page .nav-links {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+
+    .faculty-page .nav-links a {
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      transition: color .2s ease;
+    }
+
+    .faculty-page .nav-links a:hover,
+    .faculty-page .nav-links a.active {
+      color: var(--gold);
+    }
+
+    .faculty-page .nav-links .admin-link {
+      padding: 10px 14px;
+      border: 1px solid var(--gold);
+      border-radius: 7px;
+      color: var(--gold);
+    }
+
+    .faculty-page .menu-toggle {
+      display: none;
+      padding: 10px 14px;
+      color: white;
+      background: var(--purple);
+      border: 1px solid var(--gold);
+      border-radius: 7px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    /* BANNER — NO TEXT OVERLAY */
+    .faculty-page .inner-hero {
+      width: 100%;
+      height: clamp(220px, 35vw, 430px);
+      min-height: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: var(--navy);
+      background-image: linear-gradient(135deg, var(--navy), var(--purple));
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      border-bottom: 4px solid var(--gold);
+    }
+
+    /* PAGE SECTIONS */
+    .faculty-page .page-section {
+      padding: 75px 7%;
+    }
+
+    .faculty-page .content-container {
+      width: 100%;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .faculty-page .light-section {
+      background: #EEE7FF;
+    }
+
+    .faculty-page .section-heading {
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .faculty-page .section-heading > span {
+      display: inline-block;
+      margin-bottom: 10px;
+      color: var(--purple);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+    }
+
+    .faculty-page .section-heading h1 {
+      margin: 12px 0;
+      color: var(--navy);
+      font-size: clamp(28px, 4vw, 40px);
+    }
+
+    .faculty-page .section-heading h1::after {
+      content: "";
+      display: block;
+      width: 65px;
+      height: 4px;
+      margin: 14px auto;
+      border-radius: 10px;
+      background: var(--gold);
+    }
+
+    .faculty-page .section-heading p {
+      max-width: 700px;
+      margin: auto;
+      color: var(--muted);
+      line-height: 1.9;
+    }
+
+    /* FACULTY CARDS */
+    .faculty-page .faculty-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 25px;
+      align-items: stretch;
+    }
+
+    .faculty-page .faculty-card {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      overflow: hidden;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(8, 11, 53, .07);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .faculty-page .faculty-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(8, 11, 53, .12);
+      border-color: var(--gold);
+    }
+
+    .faculty-page .faculty-photo-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 220px;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--navy), var(--purple));
+      border-bottom: 4px solid var(--gold);
+    }
+
+    .faculty-page .faculty-photo {
+      display: block;
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      object-position: center top;
+      background: #E8E0F6;
+      cursor: zoom-in;
+      transition: transform .35s ease;
+    }
+
+    .faculty-page .faculty-card:hover .faculty-photo {
+      transform: scale(1.025);
+    }
+
+    .faculty-page .no-photo {
+      color: white;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    .faculty-page .faculty-info {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      padding: 25px;
+    }
+
+    .faculty-page .faculty-category {
+      align-self: flex-start;
+      margin-bottom: 13px;
+      padding: 6px 11px;
+      color: var(--purple);
+      background: var(--light-purple);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .5px;
+    }
+
+    .faculty-page .faculty-info h2 {
+      margin: 0 0 10px;
+      color: var(--navy);
+      font-size: 21px;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+
+    .faculty-page .position {
+      margin: 0 0 15px;
+      color: var(--purple);
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .faculty-page .specialization {
+      margin: 0 0 13px;
+      padding-top: 13px;
+      border-top: 1px solid #E8E0F6;
+      color: #5F5676;
+      font-size: 13px;
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+    }
+
+    .faculty-page .specialization strong {
+      color: var(--navy);
+    }
+
+    .faculty-page .bio {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.9;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .faculty-page .loading,
+    .faculty-page .empty,
+    .faculty-page .error {
+      grid-column: 1 / -1;
+      padding: 30px;
+      color: var(--muted);
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      text-align: center;
+      line-height: 1.8;
+    }
+
+    .faculty-page .error {
+      color: #B42318;
+    }
+
+    /* NOTICE */
+    .faculty-page .notice-box {
+      padding: 30px;
+      background: white;
+      border: 1px solid var(--border);
+      border-left: 5px solid var(--gold);
+      border-radius: 14px;
+      box-shadow: 0 8px 24px rgba(8, 11, 53, .05);
+    }
+
+    .faculty-page .notice-box strong {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--navy);
+      font-size: 20px;
+    }
+
+    .faculty-page .notice-box p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.9;
+    }
+
+    .faculty-page .notice-box a {
+      color: var(--purple);
+      font-weight: 700;
+    }
+
+    .faculty-page .notice-box a:hover {
+      color: var(--navy);
+      text-decoration: underline;
+    }
+
+    /* FOOTER */
+    .faculty-page .footer {
+      margin-top: 0;
+      padding: 40px 7%;
+      color: #EEE7FF;
+      background: var(--navy);
+      border-top: 4px solid var(--gold);
+      text-align: center;
+    }
+
+    .faculty-page .footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .faculty-page .footer-brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .faculty-page .footer-brand .logo-img {
+      width: 55px;
+      height: 55px;
+    }
+
+    .faculty-page .footer-brand strong {
+      color: white;
+      font-size: 18px;
+    }
+
+    .faculty-page .footer-brand p {
+      margin: 5px 0;
+      color: #D5C9F5;
+      font-size: 13px;
+    }
+
+    .faculty-page .footer-tagline {
+      margin: 0;
+      color: var(--gold);
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .faculty-page .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px 22px;
+    }
+
+    .faculty-page .footer-links a {
+      color: #EEE7FF;
+      font-size: 13px;
+      transition: color .2s ease;
+    }
+
+    .faculty-page .footer-links a:hover {
+      color: var(--gold);
+    }
+
+    .faculty-page .copyright {
+      width: 100%;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, .2);
+      color: #D5C9F5;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    /* PHOTO LIGHTBOX */
+    .faculty-page .faculty-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 15px;
+      padding: 25px;
+      background: rgba(5, 5, 20, .94);
+    }
+
+    .faculty-page .faculty-lightbox[hidden] {
+      display: none !important;
+    }
+
+    .faculty-page .faculty-lightbox img {
+      display: block;
+      max-width: min(90vw, 950px);
+      max-height: 78vh;
+      object-fit: contain;
+      border: 3px solid var(--gold);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .faculty-page .faculty-lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 25px;
+      width: 45px;
+      height: 45px;
+      color: white;
+      background: var(--purple);
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      font-size: 30px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .faculty-page .faculty-lightbox-caption {
+      margin: 0;
+      color: white;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .faculty-page .nav-container {
+        position: relative;
+        flex-wrap: wrap;
+        padding: 14px 0;
+      }
+
+      .faculty-page .menu-toggle {
+        display: block;
+      }
+
+      .faculty-page .nav-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: 10px 0;
+      }
+
+      .faculty-page .nav-links.open {
+        display: flex;
+      }
+
+      .faculty-page .nav-links a {
+        padding: 13px 10px;
+      }
+
+      .faculty-page .faculty-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .faculty-page .nav-container {
+        width: 92%;
+      }
+
+      .faculty-page .brand-text strong {
+        font-size: 17px;
+      }
+
+      .faculty-page .brand-text span {
+        font-size: 9px;
+      }
+
+      .faculty-page .logo-img {
+        width: 45px;
+        height: 45px;
+      }
+
+      .faculty-page .inner-hero {
+        height: 220px;
+      }
+
+      .faculty-page .page-section {
+        padding: 50px 5%;
+      }
+
+      .faculty-page .faculty-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .faculty-page .faculty-photo {
+        height: 300px;
+      }
+
+      .faculty-page .faculty-info {
+        padding: 22px;
+      }
+
+      .faculty-page .footer {
+        padding: 35px 5%;
+      }
+    }
+  </style>
+</head>
+
+<body class="faculty-page">
+
+  <!-- NAVIGATION -->
+  <header class="navbar">
+    <div class="nav-container">
+
+      <a class="brand" href="index.html" aria-label="EECP Computer Science Department home">
+        <img
+          id="siteLogo"
+          class="logo-img"
+          src="images/ccs-logo.jpg"
+          alt="EECP Computer Science logo"
+        >
+
+        <div class="brand-text">
+          <strong>EECP</strong>
+          <span>COMPUTER SCIENCE DEPARTMENT</span>
+        </div>
+      </a>
+
+      <button
+        type="button"
+        id="menuToggle"
+        class="menu-toggle"
+        aria-label="Open navigation"
+        aria-expanded="false"
+        aria-controls="navLinks"
+      >☰</button>
+
+      <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="programs.html">Programs</a>
+        <a href="faculty.html" class="active">Faculty</a>
+        <a href="news.html">News</a>
+        <a href="events.html">Events</a>
+        <a href="contact.html">Contact</a>
+        <a href="admin-faculty.html" class="admin-link">Admin</a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- FACULTY BANNER: IMAGE ONLY -->
+  <section
+    class="inner-hero"
+    id="facultyHero"
+    aria-label="Faculty and staff banner"
+  ></section>
+
+  <main>
+
+    <!-- FACULTY INTRODUCTION -->
+    <section class="page-section">
+      <div class="content-container">
+
+        <div class="section-heading">
+          <span>OUR PEOPLE</span>
+          <h1>Faculty &amp; Staff</h1>
+          <p>
+            Meet the dedicated faculty and staff of the EECP Computer Science
+            Department who guide, support, and inspire students in their
+            academic journey and professional development.
+          </p>
+        </div>
+
+        <div class="faculty-grid" id="facultyContainer" aria-live="polite">
+          <p class="loading">Loading faculty and staff...</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- NOTICE SECTION -->
+    <section class="page-section light-section">
+      <div class="content-container">
+        <div class="notice-box">
+          <strong>Meet Our Department Community</strong>
+          <p>
+            Our faculty and staff support student learning, academic growth,
+            and the development of computer science skills. For inquiries,
+            please visit our <a href="contact.html">Contact page</a>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-content">
+
+      <div class="footer-brand">
+        <img
+          id="footerSiteLogo"
+          class="logo-img"
+          src="images/ccs-logo.jpg"
+          alt="EECP Computer Science logo"
+        >
+
+        <div>
+          <strong>EECP</strong>
+          <p>Computer Science Department</p>
+        </div>
+      </div>
+
+      <p class="footer-tagline">Learn. Build. Innovate.</p>
+
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="programs.html">Programs</a>
+        <a href="faculty.html">Faculty</a>
+        <a href="news.html">News</a>
+        <a href="events.html">Events</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+
+      <p class="copyright">
+        © <span id="year"></span>
+        EECP Computer Science Department. All rights reserved.
+      </p>
+
+    </div>
+  </footer>
+
+  <!-- FACULTY PHOTO LIGHTBOX -->
+  <div
+    id="facultyLightbox"
+    class="faculty-lightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Expanded faculty photo"
+    hidden
+  >
+    <button
+      type="button"
+      id="lightboxClose"
+      class="faculty-lightbox-close"
+      aria-label="Close enlarged image"
+    >×</button>
+
+    <img id="lightboxImage" src="" alt="Enlarged faculty photo">
+    <p id="lightboxCaption" class="faculty-lightbox-caption"></p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const client = window.supabaseClient;
+      const $ = id => document.getElementById(id);
+
+      $("year").textContent = new Date().getFullYear();
+
+      function esc(value = "") {
+        return String(value ?? "").replace(/[&<>"']/g, char => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        })[char]);
+      }
+
+      function safeUrl(value) {
+        if (!value) return "";
+
+        try {
+          const url = new URL(value, window.location.href);
+
+          return ["http:", "https:"].includes(url.protocol)
+            ? url.href
+            : "";
+        } catch {
+          return "";
+        }
+      }
+
+      /*
+       * FACULTY-ONLY BRANDING
+       * Reads only the Faculty row from page_branding.
+       * Does not modify Programs or About branding.
+       */
+      async function loadBranding() {
+        if (!client) {
+          console.error(
+            "Supabase client is not configured. Check js/config.js."
+          );
+          return;
+        }
+
+        try {
+          const { data, error } = await client
+            .from("page_branding")
+            .select("page_key, logo_url, banner_url")
+            .eq("page_key", "faculty")
+            .maybeSingle();
+
+          if (error) {
+            throw error;
+          }
+
+          if (!data) {
+            console.warn(
+              'No branding record found in page_branding for page_key="faculty".'
+            );
+            return;
+          }
+
+          const logo = safeUrl(data.logo_url);
+          const banner = safeUrl(data.banner_url);
+
+          const siteLogo = $("siteLogo");
+          const footerSiteLogo = $("footerSiteLogo");
+          const facultyHero = $("facultyHero");
+
+          if (logo) {
+            if (siteLogo) {
+              siteLogo.src = logo;
+            }
+
+            if (footerSiteLogo) {
+              footerSiteLogo.src = logo;
+            }
+          }
+
+          if (banner && facultyHero) {
+            facultyHero.style.backgroundImage =
+              `url("${banner.replace(/["\\]/g, "")}")`;
+
+            facultyHero.style.backgroundSize = "cover";
+            facultyHero.style.backgroundPosition = "center";
+            facultyHero.style.backgroundRepeat = "no-repeat";
+          }
+
+          console.info("Faculty branding loaded.", {
+            logoLoaded: Boolean(logo),
+            bannerLoaded: Boolean(banner)
+          });
+
+        } catch (error) {
+          console.error(
+            "Faculty branding could not load:",
+            error.message || error
+          );
+        }
+      }
+
+      /* FACULTY PHOTO LIGHTBOX */
+      function openLightbox(url, name) {
+        const imageUrl = safeUrl(url);
+        if (!imageUrl) return;
+
+        $("lightboxImage").src = imageUrl;
+        $("lightboxImage").alt = "Photo of " + (name || "faculty member");
+        $("lightboxCaption").textContent = name || "";
+
+        $("facultyLightbox").hidden = false;
+        document.body.style.overflow = "hidden";
+        $("lightboxClose").focus();
+      }
+
+      function closeLightbox() {
+        $("facultyLightbox").hidden = true;
+        $("lightboxImage").removeAttribute("src");
+        $("lightboxCaption").textContent = "";
+        document.body.style.overflow = "";
+      }
+
+      $("lightboxClose").addEventListener("click", event => {
+        event.stopPropagation();
+        closeLightbox();
+      });
+
+      $("facultyLightbox").addEventListener("click", event => {
+        if (event.target === $("facultyLightbox")) {
+          closeLightbox();
+        }
+      });
+
+      $("lightboxImage").addEventListener("click", event => {
+        event.stopPropagation();
+      });
+
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !$("facultyLightbox").hidden) {
+          closeLightbox();
+        }
+      });
+
+      /* LOAD FACULTY PROFILES */
+      async function loadFaculty() {
+        const container = $("facultyContainer");
+
+        if (!client) {
+          container.innerHTML =
+            '<p class="error">Supabase is not configured. Check js/config.js.</p>';
+          return;
+        }
+
+        try {
+          const { data, error } = await client
+            .from("faculty")
+            .select("id,name,position,specialization,bio,photo_url")
+            .order("name", { ascending: true });
+
+          if (error) {
+            throw error;
+          }
+
+          if (!data || data.length === 0) {
+            container.innerHTML =
+              '<p class="empty">Faculty profiles will appear here soon.</p>';
+            return;
+          }
+
+          container.innerHTML = data.map(person => {
+            const photoUrl = safeUrl(person.photo_url || "");
+
+            const photoMarkup = photoUrl
+              ? `
+                <div class="faculty-photo-wrap">
+                  <img
+                    class="faculty-photo"
+                    src="${esc(photoUrl)}"
+                    alt="Photo of ${esc(person.name)}"
+                    loading="lazy"
+                    tabindex="0"
+                    role="button"
+                    aria-label="Enlarge photo of ${esc(person.name)}"
+                    data-faculty-photo="${esc(photoUrl)}"
+                    data-faculty-name="${esc(person.name)}"
+                  >
+                </div>
+              `
+              : `
+                <div class="faculty-photo-wrap">
+                  <div class="faculty-photo no-photo">NO PHOTO</div>
+                </div>
+              `;
+
+            return `
+              <article class="faculty-card">
+                ${photoMarkup}
+
+                <div class="faculty-info">
+                  <span class="faculty-category">FACULTY &amp; STAFF</span>
+
+                  <h2>${esc(person.name)}</h2>
+
+                  <p class="position">${esc(person.position)}</p>
+
+                  ${
+                    person.specialization
+                      ? `
+                        <p class="specialization">
+                          <strong>Specialization:</strong>
+                          ${esc(person.specialization)}
+                        </p>
+                      `
+                      : ""
+                  }
+
+                  ${
+                    person.bio
+                      ? `<p class="bio">${esc(person.bio)}</p>`
+                      : ""
+                  }
+                </div>
+              </article>
+            `;
+          }).join("");
+
+        } catch (error) {
+          console.error("Faculty loading error:", error);
+
+          container.innerHTML =
+            '<p class="error">Unable to load faculty profiles. Check the faculty table and public SELECT policy.</p>';
+        }
+      }
+
+      /* CLICK OR KEYBOARD TO ENLARGE FACULTY PHOTO */
+      $("facultyContainer").addEventListener("click", event => {
+        const image = event.target.closest("img[data-faculty-photo]");
+        if (!image) return;
+
+        openLightbox(
+          image.dataset.facultyPhoto,
+          image.dataset.facultyName
+        );
+      });
+
+      $("facultyContainer").addEventListener("keydown", event => {
+        const image = event.target.closest("img[data-faculty-photo]");
+
+        if (
+          image &&
+          (event.key === "Enter" || event.key === " ")
+        ) {
+          event.preventDefault();
+
+          openLightbox(
+            image.dataset.facultyPhoto,
+            image.dataset.facultyName
+          );
+        }
+      });
+
+      /* MOBILE NAVIGATION */
+      const menuToggle = $("menuToggle");
+      const navLinks = $("navLinks");
+
+      menuToggle.addEventListener("click", () => {
+        const isOpen = navLinks.classList.toggle("open");
+
+        menuToggle.setAttribute("aria-expanded", String(isOpen));
+        menuToggle.setAttribute(
+          "aria-label",
+          isOpen ? "Close navigation" : "Open navigation"
+        );
+
+        menuToggle.textContent = isOpen ? "×" : "☰";
+      });
+
+      /* INITIALIZE PAGE */
+      loadBranding();
+      loadFaculty();
+    })();
+  </script>
+
+</body>
+</html>

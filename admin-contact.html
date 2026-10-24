@@ -1,0 +1,1254 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Manage EECP Computer Science Department contact information and logo.">
+    <title>Contact Management | EECP Computer Science</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+
+    <style>
+        :root {
+            --navy: #080B35;
+            --purple: #4B19A8;
+            --gold: #FFBF3C;
+            --white: #fff;
+            --light: #f5f3fc;
+            --text: #30334d;
+            --muted: #6e7088;
+            --border: #e4def4;
+            --green: #168653;
+            --red: #c73535;
+        }
+
+        * { box-sizing: border-box; }
+
+        [hidden] { display: none !important; }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text);
+            background: var(--light);
+            line-height: 1.6;
+        }
+
+        button, input, textarea { font: inherit; }
+
+        .topbar {
+            background: var(--navy);
+            color: white;
+            border-bottom: 4px solid var(--gold);
+            padding: 17px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            background: var(--purple);
+            border: 2px solid var(--gold);
+            border-radius: 12px;
+            color: var(--gold);
+            font-size: 19px;
+            font-weight: 800;
+        }
+
+        .brand h1 {
+            margin: 0;
+            color: var(--gold);
+            font-size: 18px;
+        }
+
+        .brand p {
+            margin: 3px 0 0;
+            color: #e5e0ff;
+            font-size: 12px;
+        }
+
+        .top-actions, .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: 0;
+            border-radius: 8px;
+            padding: 11px 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            filter: brightness(.97);
+        }
+
+        .btn:disabled {
+            opacity: .65;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-light { background: white; color: var(--navy); }
+        .btn-gold { background: var(--gold); color: var(--navy); }
+        .btn-purple { background: var(--purple); color: white; }
+        .btn-muted { background: #eeeaf8; color: var(--purple); }
+        .btn-danger { background: #fff0f0; color: #a12828; }
+
+        .container {
+            width: min(1100px, 92%);
+            margin: 0 auto;
+            padding: 32px 0 55px;
+        }
+
+        .page-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .page-heading h2 {
+            color: var(--navy);
+            font-size: clamp(25px, 4vw, 32px);
+            margin: 0 0 7px;
+        }
+
+        .page-heading p {
+            margin: 0;
+            color: var(--muted);
+            max-width: 690px;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 26px;
+            margin-bottom: 23px;
+            box-shadow: 0 8px 25px rgba(8, 11, 53, .05);
+        }
+
+        .panel-heading {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 17px;
+            margin-bottom: 22px;
+        }
+
+        .panel-heading h3 {
+            color: var(--navy);
+            margin: 0 0 5px;
+            font-size: 21px;
+        }
+
+        .panel-heading p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            min-width: 0;
+        }
+
+        .field.full { grid-column: 1 / -1; }
+
+        .field label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .field input,
+        .field textarea {
+            width: 100%;
+            padding: 12px 13px;
+            color: var(--text);
+            background: #fcfbff;
+            border: 1px solid #d8d1e9;
+            border-radius: 9px;
+            outline: none;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        .field input:focus,
+        .field textarea:focus {
+            border-color: var(--purple);
+            box-shadow: 0 0 0 3px rgba(75, 25, 168, .1);
+        }
+
+        .field textarea {
+            min-height: 105px;
+            resize: vertical;
+        }
+
+        .field small {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .notice {
+            display: none;
+            padding: 13px 16px;
+            border-radius: 9px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            overflow-wrap: anywhere;
+        }
+
+        .notice.visible { display: block; }
+
+        .notice.success {
+            color: #11663e;
+            background: #e8f8ef;
+            border: 1px solid #bce9ce;
+        }
+
+        .notice.error {
+            color: #8d2020;
+            background: #fff0f0;
+            border: 1px solid #efc5c5;
+        }
+
+        .notice.info {
+            color: #33227a;
+            background: #f0edff;
+            border: 1px solid #d8d0ff;
+        }
+
+        .preview {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .preview-card {
+            background: var(--light);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--purple);
+            border-radius: 11px;
+            padding: 17px;
+            min-width: 0;
+        }
+
+        .preview-card strong {
+            display: block;
+            color: var(--navy);
+            margin-bottom: 6px;
+        }
+
+        .preview-card span {
+            display: block;
+            color: var(--muted);
+            overflow-wrap: anywhere;
+            font-size: 13px;
+            white-space: pre-wrap;
+        }
+
+        /* LOGO MANAGEMENT */
+
+        .logo-layout {
+            display: grid;
+            grid-template-columns: 190px minmax(0, 1fr);
+            gap: 25px;
+            align-items: center;
+        }
+
+        .logo-preview-box {
+            width: 180px;
+            height: 180px;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            background: #faf9ff;
+            border: 2px dashed var(--border);
+            border-radius: 16px;
+        }
+
+        .logo-preview {
+            max-width: 100%;
+            max-height: 100%;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 8px;
+        }
+
+        .logo-placeholder {
+            padding: 15px;
+            color: var(--muted);
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .logo-controls {
+            min-width: 0;
+        }
+
+        .logo-controls p {
+            margin: 0 0 15px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .logo-controls input[type="file"] {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #fcfbff;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+        }
+
+        .footer-note {
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            padding: 12px 0;
+        }
+
+        @media (max-width: 650px) {
+            .container {
+                width: 92%;
+                padding-top: 23px;
+            }
+
+            .panel { padding: 19px; }
+
+            .form-grid, .preview { grid-template-columns: 1fr; }
+
+            .field.full { grid-column: auto; }
+
+            .brand h1 { font-size: 15px; }
+
+            .topbar { padding: 15px 4%; }
+
+            .logo-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .logo-preview-box {
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="brand">
+        <div class="brand-icon">CS</div>
+        <div>
+            <h1>EECP Computer Science Department</h1>
+            <p>Admin Dashboard / Contact Management</p>
+        </div>
+    </div>
+
+    <div class="top-actions">
+        <button class="btn btn-light" id="dashboardBtn" type="button">
+            ← Dashboard
+        </button>
+
+        <button class="btn btn-gold" id="signOutBtn" type="button">
+            Sign Out
+        </button>
+    </div>
+</header>
+
+<main class="container">
+
+    <div class="page-heading">
+        <div>
+            <h2>Contact Management</h2>
+            <p>
+                Edit the contact details, inquiry instructions, official
+                contact channels, and website logo.
+            </p>
+        </div>
+
+        <a href="contact.html" target="_blank" rel="noopener"
+           class="btn btn-purple">
+            View Public Page ↗
+        </a>
+    </div>
+
+    <div id="notice" class="notice" role="status" aria-live="polite"></div>
+
+    <!-- LOGO MANAGEMENT -->
+
+    <section class="panel">
+        <div class="panel-heading">
+            <h3>Website Logo</h3>
+            <p>
+                Change the department logo displayed on the public website.
+                This section changes the logo only.
+            </p>
+        </div>
+
+        <div class="logo-layout">
+            <div class="logo-preview-box">
+                <img
+                    id="logoPreview"
+                    class="logo-preview"
+                    alt="Website logo preview"
+                    hidden
+                >
+
+                <div id="logoPlaceholder" class="logo-placeholder">
+                    No saved logo loaded.
+                </div>
+            </div>
+
+            <div class="logo-controls">
+                <label for="logoFile"><strong>Choose a new logo</strong></label>
+
+                <input
+                    type="file"
+                    id="logoFile"
+                    accept="image/jpeg,image/png,image/webp"
+                >
+
+                <p>
+                    Accepted formats: JPG, PNG, WebP. Maximum file size: 5 MB.
+                    The logo is saved independently of your contact details
+                    and page banners.
+                </p>
+
+                <div class="actions">
+                    <button
+                        class="btn btn-purple"
+                        id="saveLogoBtn"
+                        type="button"
+                    >
+                        Upload / Save Logo
+                    </button>
+
+                    <button
+                        class="btn btn-danger"
+                        id="removeLogoBtn"
+                        type="button"
+                    >
+                        Remove Logo
+                    </button>
+
+                    <button
+                        class="btn btn-muted"
+                        id="reloadLogoBtn"
+                        type="button"
+                    >
+                        Reload Logo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT PAGE CONTENT -->
+
+    <section class="panel">
+        <div class="panel-heading">
+            <h3>Contact Page Content</h3>
+            <p>
+                Edit the contact information displayed on the public Contact page.
+            </p>
+        </div>
+
+        <form id="contactForm">
+            <div class="form-grid">
+
+                <div class="field full">
+                    <label for="heading">Hero Heading</label>
+                    <input
+                        id="heading"
+                        maxlength="150"
+                        required
+                        value="Contact the Department"
+                    >
+                </div>
+
+                <div class="field full">
+                    <label for="description">Hero Description</label>
+                    <textarea id="description" maxlength="2000" required>Have a question or concern? Get in touch with the EECP Computer Science Department using the contact information or inquiry form below.</textarea>
+                </div>
+
+                <div class="field">
+                    <label for="email">Email Address</label>
+                    <input
+                        id="email"
+                        type="email"
+                        maxlength="254"
+                        value="carlokilatan70@gmail.com"
+                        required
+                    >
+                </div>
+
+                <div class="field">
+                    <label for="phone">Phone Number</label>
+                    <input id="phone" maxlength="60" value="09071057887">
+                </div>
+
+                <div class="field full">
+                    <label for="address">Office Address</label>
+                    <textarea id="address" maxlength="1000">M.H. Del Pilar St., Pinamalayan, Oriental Mindoro</textarea>
+                </div>
+
+                <div class="field">
+                    <label for="office_hours">Office Hours</label>
+                    <input
+                        id="office_hours"
+                        maxlength="250"
+                        value="Monday–Friday: 8:00 AM–5:00 PM"
+                    >
+                </div>
+
+                <div class="field">
+                    <label for="facebook_url">Official Facebook Page URL</label>
+                    <input
+                        id="facebook_url"
+                        type="url"
+                        maxlength="1000"
+                        placeholder="https://www.facebook.com/YourOfficialPage"
+                    >
+                    <small>Enter the verified Facebook page URL.</small>
+                </div>
+
+                <div class="field full">
+                    <label for="map_url">Google Maps URL</label>
+                    <input
+                        id="map_url"
+                        type="url"
+                        maxlength="1000"
+                        placeholder="Add a verified map link"
+                    >
+                </div>
+
+                <div class="field full">
+                    <label for="assistance_note">Need Assistance? Message</label>
+                    <textarea id="assistance_note" maxlength="2000">Prepare your question or concern clearly so the appropriate department representative can assist you. Please allow time for a response during office hours.</textarea>
+                </div>
+
+            </div>
+
+            <div class="actions" style="margin-top:22px">
+                <button class="btn btn-purple" id="saveBtn" type="submit">
+                    Save Contact Information
+                </button>
+
+                <button class="btn btn-muted" id="reloadBtn" type="button">
+                    Reload Saved Data
+                </button>
+            </div>
+        </form>
+    </section>
+
+    <!-- CONTACT PREVIEW -->
+
+    <section class="panel">
+        <div class="panel-heading">
+            <h3>Information Preview</h3>
+            <p>Preview of the values currently entered in this form.</p>
+        </div>
+
+        <div class="preview">
+            <div class="preview-card">
+                <strong>Page Heading</strong>
+                <span id="previewHeading">Contact the Department</span>
+            </div>
+
+            <div class="preview-card">
+                <strong>Email Address</strong>
+                <span id="previewEmail">carlokilatan70@gmail.com</span>
+            </div>
+
+            <div class="preview-card">
+                <strong>Phone Number</strong>
+                <span id="previewPhone">09071057887</span>
+            </div>
+
+            <div class="preview-card">
+                <strong>Office Address</strong>
+                <span id="previewAddress">M.H. Del Pilar St., Pinamalayan, Oriental Mindoro</span>
+            </div>
+
+            <div class="preview-card">
+                <strong>Office Hours</strong>
+                <span id="previewHours">Monday–Friday: 8:00 AM–5:00 PM</span>
+            </div>
+
+            <div class="preview-card">
+                <strong>Facebook Page</strong>
+                <span id="previewFacebook">Not provided</span>
+            </div>
+        </div>
+    </section>
+
+    <p class="footer-note">
+        EECP Computer Science Department · Authorized administrators only
+    </p>
+</main>
+
+<script>
+(() => {
+    "use strict";
+
+    const supabase = window.supabaseClient;
+    const $ = id => document.getElementById(id);
+
+    let adminId = null;
+    let savedLogoUrl = null;
+    let selectedLogoFile = null;
+    let temporaryLogoUrl = null;
+
+    const fields = [
+        "heading",
+        "description",
+        "email",
+        "phone",
+        "address",
+        "office_hours",
+        "facebook_url",
+        "map_url",
+        "assistance_note"
+    ];
+
+    /* NOTIFICATIONS */
+function generateUUID() {
+    if (
+        typeof crypto !== "undefined" &&
+        typeof crypto.randomUUID === "function"
+    ) {
+        return crypto.randomUUID();
+    }
+
+    if (
+        typeof crypto !== "undefined" &&
+        typeof crypto.getRandomValues === "function"
+    ) {
+        const bytes = new Uint8Array(16);
+        crypto.getRandomValues(bytes);
+
+        bytes[6] = (bytes[6] & 0x0f) | 0x40;
+        bytes[8] = (bytes[8] & 0x3f) | 0x80;
+
+        const hex = Array.from(bytes, byte =>
+            byte.toString(16).padStart(2, "0")
+        ).join("");
+
+        return [
+            hex.slice(0, 8),
+            hex.slice(8, 12),
+            hex.slice(12, 16),
+            hex.slice(16, 20),
+            hex.slice(20)
+        ].join("-");
+    }
+
+    throw new Error(
+        "Secure UUID generation is unavailable. Please use a supported browser and secure connection."
+    );
+}
+    function showNotice(message, type = "info") {
+        const el = $("notice");
+        el.textContent = message;
+        el.className = "notice visible " + type;
+    }
+
+    function clearNotice() {
+        $("notice").textContent = "";
+        $("notice").className = "notice";
+    }
+
+    function getValue(id) {
+        return $(id).value.trim();
+    }
+
+    function validOptionalURL(value) {
+        if (!value) return true;
+
+        try {
+            const url = new URL(value);
+            return url.protocol === "https:" || url.protocol === "http:";
+        } catch {
+            return false;
+        }
+    }
+
+    /* ADMIN AUTHENTICATION */
+
+    async function verifyAdmin() {
+        if (!supabase) {
+            throw new Error(
+                "Supabase client was not found. Check js/config.js."
+            );
+        }
+
+        const { data, error } = await supabase.auth.getUser();
+
+        if (error || !data?.user) {
+            window.location.replace("admin-login.html");
+            return false;
+        }
+
+        adminId = data.user.id;
+
+        const { data: admin, error: adminError } = await supabase
+            .from("admins")
+            .select("user_id")
+            .eq("user_id", adminId)
+            .maybeSingle();
+
+        if (adminError) {
+            throw new Error(
+                "Admin verification failed: " + adminError.message
+            );
+        }
+
+        if (!admin) {
+            await supabase.auth.signOut();
+            window.location.replace("admin-login.html");
+            return false;
+        }
+
+        return true;
+    }
+
+    /* LOGO PREVIEW */
+
+    function displayLogo(url) {
+        const image = $("logoPreview");
+        const placeholder = $("logoPlaceholder");
+
+        if (url) {
+            image.src = url;
+            image.hidden = false;
+            placeholder.hidden = true;
+        } else {
+            image.removeAttribute("src");
+            image.hidden = true;
+            placeholder.hidden = false;
+            placeholder.textContent = "No logo has been saved.";
+        }
+    }
+
+    async function loadLogo() {
+        const { data, error } = await supabase
+            .from("site_branding")
+            .select("logo_url")
+            .eq("id", 1)
+            .maybeSingle();
+
+        if (error) {
+            throw new Error("Could not load logo: " + error.message);
+        }
+
+        if (!data) {
+            throw new Error(
+                "No site_branding record exists with ID 1."
+            );
+        }
+
+        savedLogoUrl = data.logo_url || null;
+        selectedLogoFile = null;
+
+        $("logoFile").value = "";
+
+        if (temporaryLogoUrl) {
+            URL.revokeObjectURL(temporaryLogoUrl);
+            temporaryLogoUrl = null;
+        }
+
+        displayLogo(savedLogoUrl);
+    }
+
+    $("logoFile").addEventListener("change", () => {
+        const file = $("logoFile").files?.[0] || null;
+
+        selectedLogoFile = file;
+
+        if (temporaryLogoUrl) {
+            URL.revokeObjectURL(temporaryLogoUrl);
+            temporaryLogoUrl = null;
+        }
+
+        if (!file) {
+            displayLogo(savedLogoUrl);
+            return;
+        }
+
+        const allowedTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+        ];
+
+        if (!allowedTypes.includes(file.type)) {
+            selectedLogoFile = null;
+            $("logoFile").value = "";
+            displayLogo(savedLogoUrl);
+
+            showNotice(
+                "Please choose a JPG, PNG, or WebP image.",
+                "error"
+            );
+
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+            selectedLogoFile = null;
+            $("logoFile").value = "";
+            displayLogo(savedLogoUrl);
+
+            showNotice(
+                "The logo must be 5 MB or smaller.",
+                "error"
+            );
+
+            return;
+        }
+
+        temporaryLogoUrl = URL.createObjectURL(file);
+        displayLogo(temporaryLogoUrl);
+
+        showNotice(
+            "Logo selected. Click Upload / Save Logo to apply it.",
+            "info"
+        );
+    });
+
+    /* UPLOAD AND SAVE LOGO */
+
+    async function saveLogo() {
+        clearNotice();
+
+        if (!selectedLogoFile) {
+            showNotice(
+                "Please choose a logo image first.",
+                "error"
+            );
+            return;
+        }
+
+        const button = $("saveLogoBtn");
+        button.disabled = true;
+        button.textContent = "Uploading...";
+
+        let uploadedPath = null;
+        let uploadedUrl = null;
+
+        try {
+            const file = selectedLogoFile;
+
+            const extensionByType = {
+                "image/jpeg": "jpg",
+                "image/png": "png",
+                "image/webp": "webp"
+            };
+
+            const extension = extensionByType[file.type];
+
+            const path =
+                adminId +
+                "/logo-" +
+                generateUUID() +
+                "." +
+                extension;
+
+            const { data: uploadData, error: uploadError } =
+                await supabase.storage
+                    .from("site-branding")
+                    .upload(path, file, {
+                        contentType: file.type,
+                        upsert: false
+                    });
+
+            if (uploadError) {
+                throw new Error(
+                    "Logo upload failed: " + uploadError.message
+                );
+            }
+
+            uploadedPath = uploadData.path;
+
+            const { data: publicData } = supabase.storage
+                .from("site-branding")
+                .getPublicUrl(uploadData.path);
+
+            uploadedUrl = publicData.publicUrl;
+
+            const { data: updatedRow, error: updateError } = await supabase
+                .from("site_branding")
+                .update({
+                    logo_url: uploadedUrl
+                })
+                .eq("id", 1)
+                .select("id")
+                .maybeSingle();
+
+            if (updateError) {
+                throw new Error(
+                    "Could not save logo URL: " + updateError.message
+                );
+            }
+
+            if (!updatedRow) {
+                throw new Error(
+                    "No site_branding row was updated. Check row ID 1 and RLS policies."
+                );
+            }
+
+            const oldUrl = savedLogoUrl;
+
+            savedLogoUrl = uploadedUrl;
+            selectedLogoFile = null;
+
+            $("logoFile").value = "";
+
+            if (temporaryLogoUrl) {
+                URL.revokeObjectURL(temporaryLogoUrl);
+                temporaryLogoUrl = null;
+            }
+
+            displayLogo(savedLogoUrl);
+
+            showNotice("Website logo saved successfully.", "success");
+
+            if (oldUrl && oldUrl !== uploadedUrl) {
+                await removeStorageImage(oldUrl);
+            }
+
+        } catch (error) {
+            console.error(error);
+
+            if (uploadedPath) {
+                await supabase.storage
+                    .from("site-branding")
+                    .remove([uploadedPath]);
+            }
+
+            showNotice(error.message, "error");
+
+        } finally {
+            button.disabled = false;
+            button.textContent = "Upload / Save Logo";
+        }
+    }
+
+    /* REMOVE LOGO */
+
+    async function removeStorageImage(url) {
+        try {
+            const parsed = new URL(url);
+
+            const marker =
+                "/storage/v1/object/public/site-branding/";
+
+            const index = parsed.pathname.indexOf(marker);
+
+            if (index < 0) return;
+
+            const path = decodeURIComponent(
+                parsed.pathname.slice(index + marker.length)
+            );
+
+            const { error } = await supabase.storage
+                .from("site-branding")
+                .remove([path]);
+
+            if (error) {
+                console.warn("Storage cleanup failed:", error.message);
+            }
+        } catch (error) {
+            console.warn("Could not remove old logo file:", error);
+        }
+    }
+
+    async function removeLogo() {
+        clearNotice();
+
+        if (!savedLogoUrl) {
+            showNotice("There is no saved logo to remove.", "error");
+            return;
+        }
+
+        const confirmed = window.confirm(
+            "Are you sure you want to remove the website logo?"
+        );
+
+        if (!confirmed) return;
+
+        const button = $("removeLogoBtn");
+        button.disabled = true;
+        button.textContent = "Removing...";
+
+        try {
+            const oldUrl = savedLogoUrl;
+
+            const { data, error } = await supabase
+                .from("site_branding")
+                .update({
+                    logo_url: null
+                })
+                .eq("id", 1)
+                .select("id")
+                .maybeSingle();
+
+            if (error) {
+                throw new Error(
+                    "Could not remove logo URL: " + error.message
+                );
+            }
+
+            if (!data) {
+                throw new Error("No branding record was updated.");
+            }
+
+            savedLogoUrl = null;
+            selectedLogoFile = null;
+            $("logoFile").value = "";
+
+            displayLogo(null);
+
+            await removeStorageImage(oldUrl);
+
+            showNotice("Website logo removed successfully.", "success");
+
+        } catch (error) {
+            showNotice(error.message, "error");
+        } finally {
+            button.disabled = false;
+            button.textContent = "Remove Logo";
+        }
+    }
+
+    $("saveLogoBtn").addEventListener("click", saveLogo);
+
+    $("removeLogoBtn").addEventListener("click", removeLogo);
+
+    $("reloadLogoBtn").addEventListener("click", async () => {
+        try {
+            await loadLogo();
+            showNotice("Saved logo reloaded.", "success");
+        } catch (error) {
+            showNotice(error.message, "error");
+        }
+    });
+
+    /* CONTACT SETTINGS */
+
+    function setForm(data) {
+        fields.forEach(field => {
+            $(field).value = data[field] ?? "";
+        });
+
+        updatePreview();
+    }
+
+    async function loadSettings() {
+        clearNotice();
+
+        const { data, error } = await supabase
+            .from("contact_settings")
+            .select("*")
+            .eq("id", 1)
+            .maybeSingle();
+
+        if (error) {
+            throw new Error(
+                "Could not load contact information: " + error.message
+            );
+        }
+
+        if (!data) {
+            throw new Error(
+                "No contact_settings record exists. Check your Supabase setup."
+            );
+        }
+
+        setForm(data);
+        showNotice("Saved contact information loaded.", "success");
+    }
+
+    function updatePreview() {
+        $("previewHeading").textContent =
+            getValue("heading") || "Not provided";
+
+        $("previewEmail").textContent =
+            getValue("email") || "Not provided";
+
+        $("previewPhone").textContent =
+            getValue("phone") || "Not provided";
+
+        $("previewAddress").textContent =
+            getValue("address") || "Not provided";
+
+        $("previewHours").textContent =
+            getValue("office_hours") || "Not provided";
+
+        $("previewFacebook").textContent =
+            getValue("facebook_url") || "Not provided";
+    }
+
+    async function saveSettings(event) {
+        event.preventDefault();
+        clearNotice();
+
+        if (!validOptionalURL(getValue("facebook_url"))) {
+            showNotice(
+                "Please enter a valid HTTP or HTTPS Facebook URL.",
+                "error"
+            );
+            return;
+        }
+
+        if (!validOptionalURL(getValue("map_url"))) {
+            showNotice(
+                "Please enter a valid HTTP or HTTPS map URL.",
+                "error"
+            );
+            return;
+        }
+
+        const button = $("saveBtn");
+        button.disabled = true;
+        button.textContent = "Saving...";
+
+        const payload = {
+            heading: getValue("heading"),
+            description: getValue("description"),
+            email: getValue("email"),
+            phone: getValue("phone"),
+            address: getValue("address"),
+            office_hours: getValue("office_hours"),
+            facebook_url: getValue("facebook_url"),
+            map_url: getValue("map_url"),
+            assistance_note: getValue("assistance_note"),
+            updated_at: new Date().toISOString(),
+            updated_by: adminId
+        };
+
+        try {
+            const { data, error } = await supabase
+                .from("contact_settings")
+                .update(payload)
+                .eq("id", 1)
+                .select("id");
+
+            if (error) throw error;
+
+            if (!data || data.length === 0) {
+                throw new Error(
+                    "No record was updated. Check the contact_settings row and admin RLS policy."
+                );
+            }
+
+            updatePreview();
+
+            showNotice(
+                "Contact information saved successfully in Supabase.",
+                "success"
+            );
+
+        } catch (error) {
+            showNotice("Save failed: " + error.message, "error");
+        } finally {
+            button.disabled = false;
+            button.textContent = "Save Contact Information";
+        }
+    }
+
+    /* EVENT LISTENERS */
+
+    fields.forEach(field => {
+        $(field).addEventListener("input", updatePreview);
+    });
+
+    $("contactForm").addEventListener("submit", saveSettings);
+
+    $("reloadBtn").addEventListener("click", async () => {
+        try {
+            await loadSettings();
+        } catch (error) {
+            showNotice(error.message, "error");
+        }
+    });
+
+    $("dashboardBtn").addEventListener("click", () => {
+        window.location.href = "admin-dashboard.html";
+    });
+
+    $("signOutBtn").addEventListener("click", async () => {
+        if (!window.confirm("Are you sure you want to sign out?")) {
+            return;
+        }
+
+        const { error } = await supabase.auth.signOut();
+
+        if (error) {
+            showNotice("Sign out failed: " + error.message, "error");
+            return;
+        }
+
+        window.location.replace("admin-login.html");
+    });
+
+    /* INITIALIZE */
+
+    async function init() {
+        try {
+            const authorized = await verifyAdmin();
+
+            if (!authorized) return;
+
+            await Promise.all([
+                loadSettings(),
+                loadLogo()
+            ]);
+
+        } catch (error) {
+            showNotice(error.message, "error");
+        }
+    }
+
+    init();
+
+})();
+</script>
+
+</body>
+</html>
